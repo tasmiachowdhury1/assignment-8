@@ -1,9 +1,9 @@
-import Navbar from "./shared/Navbar";
+import Hero from "./shared/Hero";
 
 export default function Home() {
   return (
     <>
-      <Navbar />
+      <Hero />
     </>
   );
 }
