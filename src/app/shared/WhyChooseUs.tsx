@@ -62,7 +62,7 @@ function Heading() {
     return (
         <h2 className="text-3xl font-bold tracking-tight text-[#211D35] sm:text-4xl lg:text-5xl">
             Your Trust,{" "}
-            <span className="bg-gradient-to-r from-[#8F51EA] to-[#FE53BB] bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-[#8F51EA] to-[rgb(254,83,187)] bg-clip-text text-transparent">
                 Our Priority
             </span>
         </h2>

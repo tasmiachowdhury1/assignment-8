@@ -1,164 +1,201 @@
+"use client";
+
 import Image from "next/image";
 import Link from "next/link";
-const BADGE_TEXT = "Your Creative Space Starts Here";
+import { useEffect, useState } from "react";
+import { ArrowRight, ChevronLeft, ChevronRight } from "lucide-react";
+import {
+    A11y,
+    Autoplay,
+    Keyboard,
+    Navigation,
+    Pagination,
+} from "swiper/modules";
+import { Swiper, SwiperSlide } from "swiper/react";
+import "swiper/css";
 
-const DESCRIPTION =
-    "Discover, book, and create in inspiring spaces " +
-    "around you. Find the perfect studio for your " +
-    "next creative project.";
-
-const CTAS = [
+const SLIDES = [
     {
-        href: "/studios",
-        label: "Explore Studios",
-        variant: "primary" as const,
+        titleTop: "Turn Your Ideas",
+        titleBottom: "Into Reality",
+        subtitle: "Professional studios for every creator.",
+        image: {
+            src: "/images/slide-1.png",
+            alt: "Photo studio with a camera on a tripod and softbox lights",
+        },
     },
     {
-        href: "/#how-it-works",
-        label: "How It Works",
-        variant: "secondary" as const,
+        titleTop: "Capture Your",
+        titleBottom: "Best Moments",
+        subtitle: "Stunning studios for photography & more.",
+        image: {
+            src: "/images/Lavender-lit minimalist photography studio.png",
+            alt: "Lavender-lit minimalist photography studio with a white backdrop",
+        },
     },
-];
+    {
+        titleTop: "Find Your",
+        titleBottom: "Perfect Studio",
+        subtitle: "Discover inspiring creative spaces near you.",
+        image: {
+            src: "/images/slide-3.png",
+            alt: "Creator smiling while working on a laptop in a purple-lit room",
+        },
+    },
+] as const;
 
-const HERO_IMAGE = {
-    src: "/images/hero.png",
-    alt: "Creative workspace at StudioSpace",
-    width: 1648,
-    height: 928,
-} as const;
+type Slide = (typeof SLIDES)[number];
 
-function Background() {
+function AccentMarks() {
     return (
-        <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-            <div className="absolute -left-48 -top-40 h-[460px] w-[460px] rounded-full bg-gradient-to-br from-[#D6BEF9] via-[#E4D5FC] to-transparent opacity-80 blur-[40px]" />
-            <div className="absolute -right-40 top-1/4 h-[420px] w-[420px] rounded-full bg-gradient-to-bl from-[#D9C4FB] via-[#EADCFF] to-transparent opacity-80 blur-[40px]" />
-            <div className="absolute -bottom-48 left-1/3 h-[380px] w-[380px] rounded-full bg-gradient-to-tr from-[#E9D9FF] to-transparent opacity-70 blur-[40px]" />
-        </div>
+        <svg
+            className="absolute -top-5 right-0 h-8 w-9 translate-x-[55%] text-[#7C3EE8] sm:-top-6 sm:h-10 sm:w-11"
+            viewBox="0 0 56 48"
+            fill="none"
+            aria-hidden
+        >
+            <path d="M10 22 L 2 12" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
+            <path d="M28 14 L 24 2" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
+            <path d="M44 18 L 52 8" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
+        </svg>
     );
 }
 
-function Badge() {
+function CallsToActions() {
     return (
-        <span className="inline-block rounded-full bg-[#d2bef9] px-5 py-2 text-sm font-semibold text-[#8F51EA]">
-            {BADGE_TEXT}
-        </span>
-    );
-}
-
-function Heading() {
-    return (
-        <div className="relative inline-block">
-            <h1 className="text-4xl font-extrabold leading-[1.1] tracking-tight text-[#211D35] sm:text-5xl lg:text-6xl">
-                Find Your
-                <span className="block bg-gradient-to-r from-[#A26BF5] to-[#7C3EE8] bg-clip-text text-transparent">
-                    Perfect Studio
-                </span>
-            </h1>
-
-            <svg
-                className="absolute -right-12 -top-6 h-10 w-12 text-[#8F51EA] sm:-right-16 sm:h-12 sm:w-14"
-                viewBox="0 0 56 48"
-                fill="none"
-                aria-hidden
+        <div className="mt-7 flex flex-wrap items-center gap-3">
+            <Link
+                href="/studios"
+                className="group inline-flex items-center gap-2 rounded-full bg-[#8F51EA] px-6 py-3 text-sm font-semibold text-white shadow-lg shadow-purple-400/40 transition hover:-translate-y-0.5 hover:bg-[#7940D0] sm:text-base"
             >
-                <path d="M10 22 L 2 12" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
-                <path d="M28 14 L 24 2" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
-                <path d="M44 18 L 52 8" stroke="currentColor" strokeWidth="6" strokeLinecap="round" />
-            </svg>
-        </div>
-    );
-}
-
-function Description() {
-    return (
-        <p className="max-w-lg text-base leading-7 text-[#77718B] sm:text-lg">
-            {DESCRIPTION}
-        </p>
-    );
-}
-
-function CallToActions() {
-    return (
-        <div className="flex flex-wrap gap-4">
-            {CTAS.map((cta) =>
-                cta.variant === "primary" ? (
-                    <Link
-                        key={cta.href}
-                        href={cta.href}
-                        className="space-btn text-sm font-semibold text-white"
-                    >
-                        {cta.label}
-                    </Link>
-                ) : (
-                    <Link
-                        key={cta.href}
-                        href={cta.href}
-                        className="inline-flex h-[42px] items-center justify-center rounded-full border border-[#8F51EA] px-7 text-sm font-semibold text-[#8F51EA] transition hover:bg-[#F0E8FF]"
-                    >
-                        {cta.label}
-                    </Link>
-                )
-            )}
-        </div>
-    );
-}
-
-function HeroImage() {
-    return (
-        <div className="relative">
-            {/* Blob behind the image */}
-            <div
-                aria-hidden
-                className="absolute -inset-6 rounded-[40px] bg-gradient-to-br from-[#D6BEF9] via-[#EADCFF] to-transparent opacity-80 blur-2xl"
-            />
-
-            <div className="relative overflow-hidden rounded-[28px] bg-white/90 p-2.5 shadow-[0_18px_40px_-18px_rgba(143,81,234,0.35)] backdrop-blur-sm">
-                <Image
-                    src={HERO_IMAGE.src}
-                    alt={HERO_IMAGE.alt}
-                    width={HERO_IMAGE.width}
-                    height={HERO_IMAGE.height}
-                    priority
-                    className="h-auto w-full rounded-[20px] object-cover"
+                Explore Studios
+                <ArrowRight
+                    className="h-4 w-4 transition-transform group-hover:translate-x-0.5"
+                    aria-hidden
                 />
-            </div>
+            </Link>
 
-            {/* Sparkle marks */}
-            <svg
-                className="absolute -left-5 -top-5 h-10 w-10 text-[#8F51EA]"
-                viewBox="0 0 40 40"
-                fill="none"
-                aria-hidden
+            <Link
+                href="/studios"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#7C3EE8] shadow-lg shadow-purple-300/30 transition hover:-translate-y-0.5 hover:bg-[#F0E8FF] sm:text-base"
             >
-                <path
-                    d="M20 4 L22.5 17.5 L36 20 L22.5 22.5 L20 36 L17.5 22.5 L4 20 L17.5 17.5 Z"
-                    fill="currentColor"
-                />
-            </svg>
+                Host Your Space
+            </Link>
         </div>
     );
 }
 
-// ---------------------------------------------------------------------------
-// Hero
-// ---------------------------------------------------------------------------
-
-export default function Hero() {
+function SlideContent({ slide }: { slide: Slide }) {
     return (
-        <section className="relative w-full overflow-hidden bg-[#F6F2FD]">
-            <Background />
-
-            <div className="relative mx-auto grid max-w-[1500px] items-center gap-12 px-5 py-16 sm:px-8 md:grid-cols-2 lg:px-12 lg:py-24">
-                {/* Left Content */}
-                <div className="flex flex-col items-start gap-6">
-                    <Badge />
-                    <Heading />
-                    <Description />
-                    <CallToActions />
+        <div className="relative z-10 flex min-h-[400px] flex-col justify-center py-14 pl-16 pr-6 sm:min-h-[430px] sm:pl-20 sm:pr-12 lg:min-h-[470px] lg:pl-24 lg:pr-16">
+            <div className="max-w-[540px]">
+                <div className="relative inline-block">
+                    <h2 className="text-3xl font-extrabold leading-[1.12] tracking-tight text-[#211D35] sm:text-4xl lg:text-[3.25rem]">
+                        <span className="block">{slide.titleTop}</span>
+                        <span className="block text-[#7C3EE8]">{slide.titleBottom}</span>
+                    </h2>
+                    <AccentMarks />
                 </div>
 
-                {/* Right Image */}
-                <HeroImage />
+                <p className="mt-4 max-w-[440px] text-base font-medium leading-6 text-[#454063] sm:text-lg">
+                    {slide.subtitle}
+                </p>
+
+                <CallsToActions />
+            </div>
+        </div>
+    );
+}
+
+function SlideBody({ slide, priority = false }: { slide: Slide; priority?: boolean }) {
+    return (
+        <div className="relative">
+            <Image
+                src={slide.image.src}
+                alt={slide.image.alt}
+                fill
+                sizes="(min-width: 1024px) 1400px, 100vw"
+                className="object-cover"
+                priority={priority}
+            />
+
+            <div className="absolute inset-0 bg-[#A48AF2]/15" aria-hidden />
+            <div
+                className="absolute inset-0 bg-gradient-to-b from-[#A48AF2] via-[#A48AF2]/92 to-[#A48AF2]/60 lg:hidden"
+                aria-hidden
+            />
+            <div
+                className="absolute inset-0 hidden bg-gradient-to-r from-[#A48AF2]/95 from-10% via-[#A48AF2]/78 via-45% to-[#A48AF2]/10 to-90% lg:block"
+                aria-hidden
+            />
+
+            <SlideContent slide={slide} />
+        </div>
+    );
+}
+
+export default function Hero() {
+    // Swiper constructs its instance during render, which would run
+    // `new Date()` during the prerender pass and break `next build`.
+    // Mount the slider only on the client and ship a static first
+    // slide as the server-rendered fallback.
+    const [mounted, setMounted] = useState(false);
+
+    useEffect(() => {
+        setMounted(true);
+    }, []);
+
+    return (
+        <section className="relative w-full overflow-hidden bg-gradient-to-b from-[#E9DDFC] via-[#F3EDFD] to-[#F6F2FD]">
+            <div className="mx-auto max-w-[1440px] px-4 py-10 sm:px-6 lg:px-10 lg:py-16">
+                <div className="relative overflow-hidden rounded-[24px] shadow-[0_25px_50px_-15px_rgba(76,29,149,0.4)] lg:rounded-[28px]">
+                    {mounted ? (
+                        <Swiper
+                            modules={[A11y, Autoplay, Keyboard, Navigation, Pagination]}
+                            className="hero-swiper"
+                            slidesPerView={1}
+                            loop
+                            speed={700}
+                            autoplay={{
+                                delay: 5000,
+                                disableOnInteraction: false,
+                                pauseOnMouseEnter: true,
+                            }}
+                            keyboard={{ enabled: true }}
+                            navigation={{
+                                prevEl: ".hero-arrow-prev",
+                                nextEl: ".hero-arrow-next",
+                            }}
+                            pagination={{ el: ".hero-pagination", clickable: true }}
+                        >
+                            {SLIDES.map((slide, index) => (
+                                <SwiperSlide key={slide.titleTop}>
+                                    <SlideBody slide={slide} priority={index === 0} />
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    ) : (
+                        <SlideBody slide={SLIDES[0]} priority />
+                    )}
+
+                    <button
+                        type="button"
+                        aria-label="Previous slide"
+                        className="hero-arrow-prev absolute left-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#8F51EA] shadow-lg shadow-purple-300/40 transition hover:bg-[#F0E8FF] sm:left-4 sm:h-10 sm:w-10 lg:left-5 lg:h-12 lg:w-12"
+                    >
+                        <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden />
+                    </button>
+
+                    <button
+                        type="button"
+                        aria-label="Next slide"
+                        className="hero-arrow-next absolute right-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#8F51EA] shadow-lg shadow-purple-300/40 transition hover:bg-[#F0E8FF] sm:right-4 sm:h-10 sm:w-10 lg:right-5 lg:h-12 lg:w-12"
+                    >
+                        <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden />
+                    </button>
+
+                    <div className="hero-pagination absolute bottom-5 left-1/2 z-20 flex -translate-x-1/2 items-center" />
+                </div>
             </div>
         </section>
     );
