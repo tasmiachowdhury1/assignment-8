@@ -96,7 +96,7 @@ export default function WhyChooseUs() {
         <section id="why-choose" className="relative w-full overflow-hidden bg-gradient-to-b from-[#F8F5FF] to-[#F1E9FE]">
             <Decorations />
 
-            <div className="relative mx-auto flex max-w-[1500px] flex-col items-center gap-6 px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
+            <div className="relative mx-auto flex max-w-[1440px] flex-col items-center gap-6 px-5 py-20 sm:px-8 lg:px-12 lg:py-28">
                 <Eyebrow />
                 <Heading />
                 <Description />

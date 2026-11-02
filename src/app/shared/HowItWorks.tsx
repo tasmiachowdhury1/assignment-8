@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { CalendarDays, CircleCheckBig, Search } from "lucide-react";
+import { CalendarDays, CircleCheckBig, Clock, Search } from "lucide-react";
 
 const BADGE_TEXT = "Simple & Hassle-Free";
 
@@ -9,11 +9,11 @@ const SUBTITLE =
 const STEPS = [
     {
         step: "Step 1",
-        title: "Search Studios",
+        title: "Discover Spaces",
         description: "Explore a variety of creative spaces near you.",
         icon: Search,
         image: {
-            src: "/images/Search Studios.png",
+            src: "/images/Discover Spaces.png",
             alt: "Creative studio desk with laptop and plants",
             width: 344,
             height: 168,
@@ -21,19 +21,31 @@ const STEPS = [
     },
     {
         step: "Step 2",
-        title: "Book Instantly",
-        description: "Choose your preferred time and book with ease.",
-        icon: CalendarDays,
+        title: "Select Shoot Hours",
+        description: "Choose the time slots that fit your schedule.",
+        icon: Clock,
         image: {
-            src: "/images/Book Instantly.png",
-            alt: "Calendar with a booking date highlighted",
+            src: "/images/hour.png",
+            alt: "Calendar with time slots highlighted for booking",
             width: 345,
             height: 168,
         },
     },
     {
         step: "Step 3",
-        title: "Create & Enjoy",
+        title: "Book Instantly",
+        description: "Confirm your booking and get ready to create.",
+        icon: CalendarDays,
+        image: {
+            src: "/images/booking.png",
+            alt: "Phone showing a booking confirmation beside a desk calendar",
+            width: 345,
+            height: 168,
+        },
+    },
+    {
+        step: "Step 4",
+        title: "Create & Produce",
         description: "Step into your creative space and bring your ideas to life.",
         icon: CircleCheckBig,
         image: {
@@ -122,7 +134,7 @@ function StepCard({ step }: { step: Step }) {
     const Icon = step.icon;
 
     return (
-        <article className="flex flex-col items-center rounded-[28px] bg-white/90 p-6 text-center shadow-[0_18px_40px_-18px_rgba(143,81,234,0.35)] backdrop-blur-sm sm:p-7">
+        <article className="flex min-w-0 flex-col items-center rounded-[28px] bg-white/90 p-6 text-center shadow-[0_18px_40px_-18px_rgba(143,81,234,0.35)] backdrop-blur-sm sm:p-7 lg:self-stretch">
             <div className="mb-5 flex h-[76px] w-[76px] items-center justify-center rounded-[22px] bg-gradient-to-br from-[#EDE2FE] to-[#F6F0FF]">
                 <Icon className="h-8 w-8 text-[#8F51EA]" strokeWidth={2.25} aria-hidden />
             </div>
@@ -157,7 +169,7 @@ export default function HowItWorks() {
         <section id="how-it-works" className="relative w-full overflow-hidden bg-[#F6F2FD]">
             <Background />
 
-            <div className="relative mx-auto max-w-[1200px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
+            <div className="relative mx-auto max-w-[1440px] px-5 py-16 sm:px-8 lg:px-12 lg:py-24">
                 <div className="flex flex-col items-center text-center">
                     <Badge />
 
@@ -170,7 +182,7 @@ export default function HowItWorks() {
                     </p>
                 </div>
 
-                <div className="mt-12 grid gap-6 lg:mt-16 lg:grid-cols-[1fr_auto_1fr_auto_1fr] lg:items-center lg:gap-4">
+                <div className="mt-12 grid gap-6 lg:mt-16 lg:grid-cols-[1fr_auto_1fr_auto_1fr_auto_1fr] lg:items-center lg:gap-4">
                     {STEPS.map((step, index) => (
                         <div key={step.step} className="contents">
                             <StepCard step={step} />
