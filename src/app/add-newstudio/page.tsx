@@ -34,7 +34,8 @@ export default function AddStudio() {
 
     const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        setMessage("");
+
+        console.log("Form submitted:", formData);
 
         const rating = Number(formData.rating);
         const pricePerHour = Number(formData.pricePerHour);
@@ -60,28 +61,28 @@ export default function AddStudio() {
 
         try {
             setIsSubmitting(true);
+            setMessage("");
 
-            const response = await fetch(
-                `${API_URL}/add-newstudio`,
-                {
-                    method: "POST",
-                    headers: {
-                        "Content-Type": "application/json",
-                    },
-                    body: JSON.stringify(studioData),
-                }
-            );
+            console.log("Sending studio data:", studioData);
 
-            const data = await response.json();
+            const res = await fetch(`${API_URL}/add-newstudio`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json",
+                },
+                body: JSON.stringify(studioData),
+            });
 
-            if (!response.ok) {
-                throw new Error(
-                    data.message || "Failed to add studio."
-                );
+            const responseText = await res.text();
+            console.log("Server response:", responseText);
+
+            if (!res.ok) {
+                throw new Error(responseText || "Failed to add studio.");
             }
 
             setMessage("Studio added successfully!");
             setFormData(initialForm);
+
         } catch (error) {
             console.error("Error adding studio:", error);
 
@@ -109,7 +110,6 @@ export default function AddStudio() {
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
-                    {/* Studio Title */}
                     <div>
                         <label
                             htmlFor="title"
@@ -129,8 +129,6 @@ export default function AddStudio() {
                             className="w-full rounded-lg border border-purple-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
                         />
                     </div>
-
-                    {/* Image URL */}
                     <div>
                         <label
                             htmlFor="imageUrl"
@@ -170,7 +168,7 @@ export default function AddStudio() {
                         >
                             <option value="">Select a category</option>
                             <option value="Photo Studio">
-                                Photo Studio
+                                Film Studio
                             </option>
                             <option value="Sound Stage">
                                 Sound Stage
@@ -193,7 +191,7 @@ export default function AddStudio() {
                             htmlFor="pricePerHour"
                             className="mb-2 block text-sm font-semibold text-[#292044]"
                         >
-                            Price Per Hour (৳)
+                            Price Per Hour ($)
                         </label>
 
                         <input
@@ -262,8 +260,8 @@ export default function AddStudio() {
                     {message && (
                         <p
                             className={`rounded-lg p-3 text-sm ${message.includes("successfully")
-                                    ? "bg-green-50 text-green-700"
-                                    : "bg-red-50 text-red-600"
+                                ? "bg-green-50 text-green-700"
+                                : "bg-red-50 text-red-600"
                                 }`}
                         >
                             {message}
