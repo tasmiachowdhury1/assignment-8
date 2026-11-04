@@ -161,11 +161,6 @@ export default function Navbar() {
                     {/* Logged Out */}
                     {!isPending && !user && (
                         <>
-                            <Avatar>
-                                <AvatarImage referrerPolicy="no referrer"
-                                    src={user?.image as string} />
-                                <AvatarFallback>{user?.name?.charAt(0)}</AvatarFallback>
-                            </Avatar>
                             <Link
                                 href="/login"
                                 className="rounded-full px-5 py-2.5 text-sm font-semibold text-[#8F51EA] transition hover:bg-purple-100"
