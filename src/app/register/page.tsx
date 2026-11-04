@@ -65,9 +65,11 @@ export default function RegisterPage() {
             });
 
             if (error) {
+                console.error("Registration error:", error);
+
                 const message =
-                    error.message ||
-                    "Unable to register. Please try again.";
+                    error.message || "Unable to register. Please try again.";
+
                 setFormError(message);
                 toast.error(message);
                 return;
@@ -308,7 +310,7 @@ export default function RegisterPage() {
                             <Button
                                 type="submit"
                                 disabled={loading || googleLoading}
-                                className="h-12 w-full rounded-xl bg-gradient-to-r from-[#8F51EA] to-[#D878F5] text-sm font-bold text-white shadow-lg shadow-purple-200 transition hover:-translate-y-0.5 hover:from-[#7940D0] hover:to-[#C45BE8] disabled:cursor-not-allowed disabled:opacity-60"
+                                className="h-12 w-full rounded-xl bg-gradient-to-r from-[#8F51EA] to-[#D878F5] text-sm font-bold text-white shadow-lg shadow-purple-200 transition hover:-translate-y-0.5 hover:from-[#7940D0] hover:to-[#C45BE8] disabled:cursor-not-allowed disabled:opacity-60 cursor-pointer"
                             >
                                 {loading ? "Registering..." : "Register"}
 
