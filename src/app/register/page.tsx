@@ -79,8 +79,14 @@ export default function RegisterPage() {
 
             router.push("/login");
             router.refresh();
-        } catch {
-            const message = "Something went wrong. Please try again.";
+        } catch (error) {
+            console.error("Registration failed:", error);
+
+            const message =
+                error instanceof Error
+                    ? error.message
+                    : "Something went wrong. Please try again.";
+
             setFormError(message);
             toast.error(message);
         } finally {

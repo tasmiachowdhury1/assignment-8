@@ -54,7 +54,7 @@ type ExtendedStudio = Studio & {
 };
 
 const API_BASE =
-    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
+    process.env.NEXT_PUBLIC_API_URL;
 
 const currency = (value: number) =>
     value.toLocaleString("en-US", {
