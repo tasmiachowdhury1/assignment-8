@@ -1,6 +1,7 @@
 import { Suspense } from "react";
 import type { Metadata } from "next";
 import StudioGrid, { StudioGridSkeleton } from "./StudioGrid";
+import SortBySelect from "./SortBySelect";
 
 export const instant = false;
 
@@ -61,6 +62,12 @@ export default async function AllStudiosPage({
 }: {
     searchParams: SearchParams;
 }) {
+    const params = await searchParams;
+    const rawCategory = Array.isArray(params.category)
+        ? params.category[0]
+        : params.category;
+    const activeCategory = rawCategory?.trim() || "all";
+
     return (
         <section className="relative min-h-screen w-full overflow-hidden bg-gradient-to-b from-[#EDE4FE] via-[#F6F1FE] to-[#FBFAFF]">
             <Background />
@@ -68,7 +75,11 @@ export default async function AllStudiosPage({
             <div className="relative mx-auto max-w-[1440px] px-5 pb-20 pt-12 sm:px-8 lg:px-12 lg:pt-16">
                 <PageHeading />
 
-                <div className="mt-10 lg:mt-14">
+                <div className="mt-10 flex justify-end lg:mt-14">
+                    <SortBySelect value={activeCategory} />
+                </div>
+
+                <div className="mt-6 lg:mt-8">
                     <Suspense fallback={<StudioGridSkeleton />}>
                         <StudioGrid searchParams={searchParams} />
                     </Suspense>
