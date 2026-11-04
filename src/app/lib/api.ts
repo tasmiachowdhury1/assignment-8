@@ -1,3 +1,5 @@
+import { parseJsonField, trimKeys } from "./json";
+
 export const API_URL =
     process.env.API_URL ||
     process.env.NEXT_PUBLIC_API_URL ||
@@ -44,25 +46,7 @@ export type Studio = {
 
 /** Parses values the API may return as JSON-encoded strings. */
 function parseMaybeJson<T>(value: unknown, fallback: T): T {
-    if (value === null || value === undefined || value === "") {
-        return fallback;
-    }
-
-    if (typeof value !== "string") {
-        return value as T;
-    }
-
-    const trimmed = value.trim();
-
-    if (!trimmed) {
-        return fallback;
-    }
-
-    try {
-        return JSON.parse(trimmed) as T;
-    } catch {
-        return fallback;
-    }
+    return parseJsonField(value, fallback);
 }
 
 function toNumber(value: unknown, fallback = 0): number {
@@ -119,23 +103,17 @@ function normalizeFields(raw: unknown): Record<string, unknown> {
     }
 
     // One API record stores the host under a key with a leading space.
-    return Object.fromEntries(
-        Object.entries(raw as Record<string, unknown>).map(([key, value]) => [
-            key.trim(),
-            value,
-        ])
-    );
+    return trimKeys(raw as Record<string, unknown>);
 }
 
 function normalizeHost(value: unknown) {
     const host = parseMaybeJson<Record<string, unknown> | null>(value, null);
 
-    // if (!host || typeof host !== "object") {
-    //     return undefined;
-    // }
+    if (!host || typeof host !== "object") {
+        return undefined;
+    }
 
     const name = String(host?.name ?? "").trim();
-    console.log("Host Name:", name);
     if (!name) {
         return undefined;
     }
@@ -262,8 +240,16 @@ export async function getStudios(): Promise<Studio[]> {
     return data.map(normalizeStudio);
 }
 
+/**
+ * A studio record straight from the API: keys are normalised, but field values
+ * may still be JSON- or JS-literal-encoded strings for the view to parse.
+ */
+export type RawStudio = Studio & Record<string, unknown>;
+
 /** Finds a single studio by its database id. */
-export async function getStudioById(id: string): Promise<any | undefined> {
+export async function getStudioById(
+    id: string
+): Promise<RawStudio | undefined> {
     const res = await fetch(`${API_URL}/studios/${encodeURIComponent(id)}`, {
         cache: "no-store",
     });
@@ -282,11 +268,7 @@ export async function getStudioById(id: string): Promise<any | undefined> {
         return undefined;
     }
 
-    const studio = (data);
-
-    // if (!studio._id && !studio.title) {
-    //     return undefined;
-    // }
-
-    return studio;
+    // Normalise keys (one record stores `" host"` with a leading space) while
+    // keeping the raw field values for the detail view to parse.
+    return trimKeys(data) as RawStudio;
 }

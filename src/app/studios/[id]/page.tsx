@@ -2,7 +2,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import StudioDetails from "@/app/studios/StudioDetails";
-import { getStudioById, type Studio } from "@/lib/api";
+import { getStudioById, type Studio } from "@/app/lib/api";
 
 // Add this line to fix the blocking prerender error
 export const instant = false;

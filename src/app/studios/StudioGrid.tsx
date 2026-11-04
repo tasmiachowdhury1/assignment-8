@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { ReactNode } from "react";
 import { LayoutGrid, TriangleAlert } from "lucide-react";
-import { getStudios, type Studio } from "@/lib/api";
+import { getStudios, type Studio } from "@/app/lib/api";
 import StudioCard from "./StudioCard";
 
 type SearchParams = Promise<{

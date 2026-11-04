@@ -16,7 +16,7 @@ import {
     Star,
     Volume2,
 } from "lucide-react";
-import type { Studio } from "@/lib/api";
+import type { Studio } from "@/app/lib/api";
 
 function CategoryIcon({
     category,

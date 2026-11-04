@@ -28,7 +28,8 @@ import {
     Wifi,
     Wind,
 } from "lucide-react";
-import type { GuestReview, Studio } from "@/lib/api";
+import type { GuestReview, Studio } from "@/app/lib/api";
+import { parseJsonField, trimKeys } from "@/app/lib/json";
 
 type Host = {
     name: string;
@@ -86,23 +87,6 @@ function getImageUrl(path?: string) {
     return path.startsWith("http")
         ? path
         : `${API_BASE}${path.startsWith("/") ? "" : "/"}${path}`;
-}
-
-function parseJsonField<T>(value: unknown, fallback: T): T {
-    if (value == null) return fallback;
-
-    let parsed = value;
-
-    // Handle normal and double-encoded JSON strings
-    for (let i = 0; i < 2 && typeof parsed === "string"; i++) {
-        try {
-            parsed = JSON.parse(parsed);
-        } catch {
-            return fallback;
-        }
-    }
-
-    return (parsed ?? fallback) as T;
 }
 
 function CategoryGlyph({
@@ -261,13 +245,10 @@ export default function StudioDetails({
 }: {
     studio: Studio;
 }) {
-    const rawStudio = studio as ExtendedStudio;
-    console.log("Studio API Data:", rawStudio);
-    console.log("Host:", rawStudio.host);
-    console.log("Reviews:", rawStudio.reviews);
-    console.log("Guest Reviews:", rawStudio.guestReviews);
+    // One API record stores its host under a key with a leading space.
+    const rawStudio = trimKeys(studio as ExtendedStudio);
 
-    // Parse backend fields
+    // Parse backend fields (stored as JS object literals, not strict JSON)
     const parsedHost = parseJsonField<Host | null>(
         rawStudio.host,
         null
@@ -313,7 +294,7 @@ export default function StudioDetails({
 
     const totalReviews = Number(
         rawStudio.totalReviews ?? reviews.length
-    );
+    ) || reviews.length;
 
     const parsedAvailability =
         parseJsonField<StudioAvailability | null>(

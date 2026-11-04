@@ -7,10 +7,10 @@ import {
     Camera,
     ChevronRight,
     Clapperboard,
+    Headphones,
     Mail,
     Mic,
     Palette,
-    Video,
 } from "lucide-react";
 
 const QUICK_LINKS = [
@@ -23,11 +23,11 @@ const QUICK_LINKS = [
 ] as const;
 
 const CATEGORIES = [
-    { name: "Photography", icon: Camera },
-    { name: "Video Production", icon: Video },
-    { name: "Podcast", icon: Mic },
-    { name: "Design & Creative", icon: Palette },
-    { name: "Film Studio", icon: Clapperboard },
+    { name: "Photo Studios", href: "/studios?category=photo-studios", icon: Camera },
+    { name: "Sound Stages", href: "/studios?category=sound-stages", icon: Clapperboard },
+    { name: "Podcast Rooms", href: "/studios?category=podcast-rooms", icon: Mic },
+    { name: "Art Workshops", href: "/studios?category=art-workshops", icon: Palette },
+    { name: "Music Suites", href: "/studios?category=music-suites", icon: Headphones },
 ] as const;
 
 const TAGLINE = ["CREATE", "CAPTURE", "INSPIRE"] as const;
@@ -83,12 +83,10 @@ const SOCIALS = [
 function Background() {
     return (
         <div className="pointer-events-none absolute inset-0 overflow-hidden" aria-hidden>
-            {/* Decorative circles above the top divider */}
+
             <div className="absolute -left-16 -top-24 h-[260px] w-[260px] rounded-full bg-[#A78BF3]/40" />
             <div className="absolute left-24 -top-28 h-[240px] w-[240px] rounded-full bg-[#C4A9F7]/30" />
             <div className="absolute left-[330px] -top-24 h-[190px] w-[190px] rounded-full bg-[#D8C8FB]/30" />
-
-            {/* Soft waves at the bottom right */}
             <svg
                 className="absolute bottom-0 right-0 h-[260px] w-[720px]"
                 viewBox="0 0 720 260"
@@ -191,7 +189,7 @@ function CategoriesColumn() {
                     return (
                         <li key={category.name}>
                             <Link
-                                href="/studios"
+                                href={category.href}
                                 className="group inline-flex items-center gap-4 text-[15px] text-[#3F3A52] transition-colors hover:text-[#8F51EA]"
                             >
                                 <Icon
