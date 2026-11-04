@@ -193,7 +193,7 @@ export default function Navbar() {
                                 aria-label="User profile menu"
                                 aria-expanded={profileOpen}
                             >
-                                {/* Avatar */}
+
                                 <div className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full bg-gradient-to-br from-[#8F51EA] to-[#FE53BB] text-white">
                                     {user.image ? (
                                         <Image
@@ -222,11 +222,11 @@ export default function Navbar() {
                                 />
                             </button>
 
-                            {/* Profile Dropdown */}
+
                             {profileOpen && (
                                 <div className="absolute right-0 top-[58px] z-50 w-[270px] overflow-hidden rounded-2xl border border-purple-100 bg-white shadow-xl shadow-purple-200/40">
 
-                                    {/* User Information */}
+
                                     <div className="border-b border-purple-100 bg-purple-50/70 p-4">
                                         <p className="truncate text-sm font-bold text-[#211D35]">
                                             {user.name}
@@ -335,7 +335,7 @@ export default function Navbar() {
                                 </div>
                             )}
 
-                            {/* Mobile Loading */}
+
                             {isPending && (
                                 <div className="h-16 animate-pulse rounded-xl bg-purple-50" />
                             )}
