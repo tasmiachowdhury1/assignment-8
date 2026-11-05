@@ -1,10 +1,9 @@
-
 "use client";
 
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname, useRouter } from "next/navigation";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import {
     Aperture,
@@ -24,10 +23,10 @@ import toast from "react-hot-toast";
 
 const navLinks = [
     { name: "Home", href: "/" },
+    { name: "About Us", href: "/#about" },
     { name: "Explore Studios", href: "/studios" },
     { name: "How It Works", href: "/#how-it-works" },
     { name: "Why Choose Us", href: "/#why-choose" },
-    { name: "About Us", href: "/#about" },
 ];
 
 const dashboardLinks = [
@@ -43,12 +42,12 @@ const dashboardLinks = [
     },
     {
         name: "My Studio Listings",
-        href: "/my-studios",
+        href: "/my-listings",
         icon: Building2,
     },
     {
         name: "My Bookings",
-        href: "/my-bookings",
+        href: "/my-booking",
         icon: CalendarCheck,
     },
 ];
@@ -62,13 +61,48 @@ export default function Navbar() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [profileOpen, setProfileOpen] = useState(false);
     const [loggingOut, setLoggingOut] = useState(false);
+    const [activeHash, setActiveHash] = useState("");
 
     const user = session?.user;
+
+    // Track scroll positions / hash changes safely on client-side
+    useEffect(() => {
+        // Set initial hash if present
+        if (typeof window !== "undefined") {
+            setActiveHash(window.location.hash);
+        }
+
+        const handleHashChange = () => {
+            setActiveHash(window.location.hash);
+        };
+
+        window.addEventListener("hashchange", handleHashChange);
+
+        // Optional Intersection Observer for scroll-based section highlighting on home page
+        const sections = document.querySelectorAll("section[id], div[id]");
+        const observer = new IntersectionObserver(
+            (entries) => {
+                entries.forEach((entry) => {
+                    if (entry.isIntersecting) {
+                        setActiveHash(`#${entry.target.id}`);
+                    }
+                });
+            },
+            { threshold: 0.3 }
+        );
+
+        sections.forEach((section) => observer.observe(section));
+
+        return () => {
+            window.removeEventListener("hashchange", handleHashChange);
+            observer.disconnect();
+        };
+    }, []);
 
     // Active route indicator
     const isActive = (href: string) => {
         if (href === "/") {
-            return pathname === "/";
+            return pathname === "/" && !activeHash;
         }
 
         if (href === "/studios") {
@@ -76,7 +110,11 @@ export default function Navbar() {
         }
 
         if (href.startsWith("/#")) {
-            return pathname === "/";
+            const linkHash = href.substring(1); // e.g., "#about"
+            const pathnameMatch = pathname === "/";
+            const hashMatch = activeHash === linkHash;
+
+            return pathnameMatch && hashMatch;
         }
 
         return pathname === href || pathname.startsWith(`${href}/`);
@@ -115,7 +153,7 @@ export default function Navbar() {
     };
 
     return (
-        <header className="sticky top-0 z-50 w-full border-b border-purple-400 bg-white/90 backdrop-blur-xl">
+        <header className="sticky top-0 z-50 w-full bg-white/90 backdrop-blur-xl">
 
             <nav className="mx-auto flex max-w-[1500px] items-center justify-between px-5 py-4 sm:px-8 lg:px-12">
 

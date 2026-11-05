@@ -1,19 +1,18 @@
+
 "use client";
 
 import Link from "next/link";
 import { useState } from "react";
 import {
     ArrowRight,
-    BadgeCheck,
     Building2,
-    CalendarDays,
     Camera,
     CheckCircle2,
     ChevronLeft,
     ChevronRight,
-    Clock,
     Clapperboard,
     Coffee,
+    Clock,
     Lightbulb,
     MapPin,
     Mic,
@@ -28,8 +27,10 @@ import {
     Wifi,
     Wind,
 } from "lucide-react";
+
 import type { GuestReview, Studio } from "@/app/lib/api";
 import { parseJsonField, trimKeys } from "@/app/lib/json";
+import BookingCard from "@/components/Booking/BookingCard";
 
 type Host = {
     name: string;
@@ -54,7 +55,7 @@ type ExtendedStudio = Studio & {
 };
 
 const API_BASE =
-    process.env.NEXT_PUBLIC_API_URL;
+    process.env.NEXT_PUBLIC_API_URL || "http://localhost:5000";
 
 const currency = (value: number) =>
     value.toLocaleString("en-US", {
@@ -81,7 +82,7 @@ const formatDate = (value: string) => {
     });
 };
 
-function getImageUrl(path?: string) {
+function getImageUrl(path?: string | null) {
     if (!path) return "";
 
     return path.startsWith("http")
@@ -99,16 +100,22 @@ function CategoryGlyph({
     switch (category?.toLowerCase()) {
         case "photo studio":
             return <Camera className={className} aria-hidden />;
+
         case "film studio":
             return <Clapperboard className={className} aria-hidden />;
+
         case "sound stage":
             return <Volume2 className={className} aria-hidden />;
+
         case "podcast room":
             return <Mic className={className} aria-hidden />;
+
         case "music suite":
             return <Music className={className} aria-hidden />;
+
         case "art workshop":
             return <Palette className={className} aria-hidden />;
+
         default:
             return <Sparkles className={className} aria-hidden />;
     }
@@ -245,10 +252,9 @@ export default function StudioDetails({
 }: {
     studio: Studio;
 }) {
-    // One API record stores its host under a key with a leading space.
     const rawStudio = trimKeys(studio as ExtendedStudio);
 
-    // Parse backend fields (stored as JS object literals, not strict JSON)
+    // Host
     const parsedHost = parseJsonField<Host | null>(
         rawStudio.host,
         null
@@ -261,6 +267,7 @@ export default function StudioDetails({
             ? parsedHost
             : null;
 
+    // Gallery
     const parsedGallery = parseJsonField<unknown>(
         rawStudio.gallery,
         []
@@ -272,6 +279,7 @@ export default function StudioDetails({
         )
         : [];
 
+    // Amenities
     const parsedAmenities = parseJsonField<unknown>(
         rawStudio.amenities,
         []
@@ -283,6 +291,7 @@ export default function StudioDetails({
         )
         : [];
 
+    // Reviews
     const parsedReviews = parseJsonField<unknown>(
         rawStudio.reviews ?? rawStudio.guestReviews,
         []
@@ -292,10 +301,11 @@ export default function StudioDetails({
         ? parsedReviews
         : [];
 
-    const totalReviews = Number(
-        rawStudio.totalReviews ?? reviews.length
-    ) || reviews.length;
+    const totalReviews =
+        Number(rawStudio.totalReviews ?? reviews.length) ||
+        reviews.length;
 
+    // Availability
     const parsedAvailability =
         parseJsonField<StudioAvailability | null>(
             rawStudio.availability,
@@ -304,7 +314,7 @@ export default function StudioDetails({
 
     const availability = parsedAvailability;
 
-    // Image path: supports both uploaded backend images and external URLs
+    // Images
     const mainImage = getImageUrl(
         rawStudio.image || studio.imageUrl
     );
@@ -317,90 +327,32 @@ export default function StudioDetails({
             Boolean(image) && list.indexOf(image) === index
     );
 
-    // Convert database values into numbers
+    // Studio information
     const rating = Number(studio.rating ?? 0);
     const pricePerHour = Number(studio.pricePerHour ?? 0);
-    const securityDeposit = Number(studio.securityDeposit ?? 0);
+    const securityDeposit = Number(
+        studio.securityDeposit ?? 0
+    );
 
     const description =
         studio.description ||
         rawStudio.overview ||
         `Discover ${studio.title}, a ${studio.category.toLowerCase()} in ${studio.location}. Book the space for your next creative project.`;
 
+    // UI state
     const [activeImage, setActiveImage] = useState(0);
     const [showAllReviews, setShowAllReviews] = useState(false);
-    const [showBooking, setShowBooking] = useState(false);
-
-    const [booking, setBooking] = useState({
-        date: "",
-        time: "",
-        duration: "2",
-        name: "",
-        email: "",
-    });
-
-    const [bookingError, setBookingError] = useState("");
-    const [bookingConfirmed, setBookingConfirmed] = useState(false);
-
-    const updateBooking = (
-        field: keyof typeof booking,
-        value: string
-    ) => {
-        setBooking((previous) => ({
-            ...previous,
-            [field]: value,
-        }));
-
-        setBookingError("");
-        setBookingConfirmed(false);
-    };
-
-    const closeBooking = () => {
-        setShowBooking(false);
-        setBookingError("");
-        setBookingConfirmed(false);
-    };
-
-    const confirmBooking = () => {
-        if (!booking.date || !booking.time) {
-            setBookingError(
-                "Please choose a date and a start time."
-            );
-            return;
-        }
-
-        if (!booking.name.trim() || !booking.email.trim()) {
-            setBookingError(
-                "Please add your name and email address."
-            );
-            return;
-        }
-
-        if (
-            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-                booking.email.trim()
-            )
-        ) {
-            setBookingError(
-                "Please enter a valid email address."
-            );
-            return;
-        }
-
-        setBookingError("");
-        setBookingConfirmed(true);
-    };
 
     const activeSrc = images[activeImage] ?? images[0];
+
     const highlightedAmenities = amenities.slice(0, 3);
 
     const price = currency(pricePerHour);
-    const total =
-        pricePerHour * Number(booking.duration || 0);
 
     return (
         <main className="min-h-screen bg-[#FAF7FD] text-[#211638]">
             <div className="mx-auto max-w-[1440px] px-4 py-7 sm:px-6 lg:px-10 lg:py-10">
+
                 {/* Breadcrumb */}
                 <nav
                     className="mb-5 flex flex-wrap items-center gap-2 text-sm text-[#8A8499]"
@@ -430,6 +382,7 @@ export default function StudioDetails({
                 </nav>
 
                 <section className="grid grid-cols-1 gap-6 xl:grid-cols-[minmax(0,1.08fr)_minmax(0,0.95fr)_300px] xl:gap-7">
+
                     {/* Gallery */}
                     <div className="min-w-0">
                         <div className="relative aspect-[16/10] overflow-hidden rounded-[20px] bg-gradient-to-br from-[#EADFFB] to-[#D9C8F7] shadow-[0_20px_45px_-30px_rgba(76,29,149,0.55)]">
@@ -528,8 +481,7 @@ export default function StudioDetails({
                                         {/* eslint-disable-next-line @next/next/no-img-element */}
                                         <img
                                             src={image}
-                                            alt={`${studio.title} gallery ${index + 1
-                                                }`}
+                                            alt={`${studio.title} gallery ${index + 1}`}
                                             className="h-full w-full object-cover"
                                         />
                                     </button>
@@ -566,26 +518,17 @@ export default function StudioDetails({
                         {/* Quick facts */}
                         <div className="mt-5 flex flex-wrap gap-2.5">
                             <span className="inline-flex items-center gap-2 rounded-xl bg-white px-3.5 py-2.5 text-sm font-semibold text-[#3B3556] shadow-sm ring-1 ring-[#EFE7FB]">
-                                <MapPin
-                                    className="h-4 w-4 shrink-0 text-[#8F51EA]"
-                                    aria-hidden
-                                />
+                                <MapPin className="h-4 w-4 shrink-0 text-[#8F51EA]" />
                                 {studio.location || "Location on request"}
                             </span>
 
                             <span className="inline-flex items-center gap-2 rounded-xl bg-white px-3.5 py-2.5 text-sm font-semibold text-[#3B3556] shadow-sm ring-1 ring-[#EFE7FB]">
-                                <Clock
-                                    className="h-4 w-4 shrink-0 text-[#8F51EA]"
-                                    aria-hidden
-                                />
+                                <Clock className="h-4 w-4 shrink-0 text-[#8F51EA]" />
                                 {price} / hr
                             </span>
 
                             <span className="inline-flex items-center gap-2 rounded-xl bg-white px-3.5 py-2.5 text-sm font-semibold text-[#3B3556] shadow-sm ring-1 ring-[#EFE7FB]">
-                                <Users
-                                    className="h-4 w-4 shrink-0 text-[#8F51EA]"
-                                    aria-hidden
-                                />
+                                <Users className="h-4 w-4 shrink-0 text-[#8F51EA]" />
                                 {studio.maxCapacity
                                     ? `Up to ${studio.maxCapacity} people`
                                     : "Flexible capacity"}
@@ -595,10 +538,7 @@ export default function StudioDetails({
                         {/* Amenities */}
                         <div className="mt-7">
                             <h2 className="flex items-center gap-2 text-xl font-bold text-[#211638]">
-                                <Sparkles
-                                    className="h-5 w-5 fill-[#8F51EA]/20 text-[#8F51EA]"
-                                    aria-hidden
-                                />
+                                <Sparkles className="h-5 w-5 fill-[#8F51EA]/20 text-[#8F51EA]" />
                                 Amenities
                             </h2>
 
@@ -635,128 +575,32 @@ export default function StudioDetails({
                         </div>
                     </div>
 
-                    {/* Booking + host */}
-                    <aside className="space-y-5">
-                        <button
-                            type="button"
-                            onClick={() => setShowBooking(true)}
-                            className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#8B5CF6] via-[#A855F7] to-[#EC4899] px-5 py-4 text-sm font-bold text-white shadow-lg shadow-purple-300/40 transition hover:-translate-y-0.5 hover:shadow-xl focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8F51EA] sm:text-base"
-                        >
-                            <CalendarDays
-                                className="h-5 w-5"
-                                aria-hidden
-                            />
-                            Book Workspace Now
-                            <ArrowRight
-                                className="h-4 w-4 transition group-hover:translate-x-0.5"
-                                aria-hidden
-                            />
-                        </button>
-
-                        <div className="rounded-2xl border border-[#EFE7FB] bg-white p-5 shadow-[0_18px_45px_-34px_rgba(76,29,149,0.5)]">
-                            <h2 className="text-lg font-bold text-[#211638]">
-                                Hosted by
-                            </h2>
-
-                            {host ? (
-                                <>
-                                    <div className="mt-4 flex items-center gap-3">
-                                        {host.photo ? (
-                                            // eslint-disable-next-line @next/next/no-img-element
-                                            <img
-                                                src={getImageUrl(host.photo)}
-                                                alt={host.name}
-                                                className="h-[72px] w-[72px] shrink-0 rounded-2xl object-cover ring-2 ring-[#F1E9FD]"
-                                            />
-                                        ) : (
-                                            <span className="grid h-[72px] w-[72px] shrink-0 place-items-center rounded-2xl bg-gradient-to-br from-[#8F51EA] to-[#EC4899] text-xl font-bold text-white">
-                                                {host.name
-                                                    .split(/\s+/)
-                                                    .slice(0, 2)
-                                                    .map((part) =>
-                                                        part[0]?.toUpperCase()
-                                                    )
-                                                    .join("")}
-                                            </span>
-                                        )}
-
-                                        <div className="min-w-0">
-                                            <h3 className="flex items-center gap-1.5 font-bold text-[#211638]">
-                                                <span className="truncate">
-                                                    {host.name}
-                                                </span>
-
-                                                <BadgeCheck
-                                                    className="h-4 w-4 shrink-0 fill-[#8F51EA] text-white"
-                                                    aria-label="Verified host"
-                                                />
-                                            </h3>
-
-                                            <p className="mt-1 text-sm text-[#77718B]">
-                                                Studio Host
-                                            </p>
-
-                                            <p className="mt-1 flex items-center gap-1.5 text-xs font-semibold text-[#3B3556]">
-                                                <Star
-                                                    className="h-3.5 w-3.5 fill-amber-400 text-amber-400"
-                                                    aria-hidden
-                                                />
-                                                {rating.toFixed(1)} (
-                                                {totalReviews} reviews)
-                                            </p>
-                                        </div>
-                                    </div>
-
-                                    {host.email && (
-                                        <a
-                                            href={`mailto:${host.email}`}
-                                            className="mt-4 block break-all text-sm font-medium text-[#8F51EA] hover:underline"
-                                        >
-                                            {host.email}
-                                        </a>
-                                    )}
-
-                                    <div className="mt-4 rounded-xl bg-[#FBF7FF] p-3.5 text-sm leading-6 text-[#5B5470]">
-                                        &ldquo;Creating is better together.
-                                        Welcome to {studio.title}.&rdquo;
-                                    </div>
-                                </>
-                            ) : (
-                                <p className="mt-3 text-sm text-[#77718B]">
-                                    Host details are not available for this
-                                    studio.
-                                </p>
-                            )}
-
-                            {availability && (
-                                <p className="mt-4 flex items-center gap-2 border-t border-[#F1E9FD] pt-4 text-sm text-[#5B5470]">
-                                    <Clock
-                                        className="h-4 w-4 text-[#8F51EA]"
-                                        aria-hidden
-                                    />
-
-                                    {availability.openingTime &&
-                                        availability.closingTime
-                                        ? `Available ${availability.openingTime} – ${availability.closingTime}`
-                                        : `Available ${availability.openingTime ||
-                                        availability.closingTime ||
-                                        "by arrangement"
-                                        }`}
-                                </p>
-                            )}
-                        </div>
-                    </aside>
+                    {/* Booking card: button + host + booking modal */}
+                    <BookingCard
+                        studio={{
+                            ...studio,
+                            _id: (studio as Studio & { _id?: string })._id,
+                            image: rawStudio.image || studio.imageUrl,
+                            pricePerHour,
+                            securityDeposit,
+                        }}
+                        host={host}
+                        rating={rating}
+                        totalReviews={totalReviews}
+                        studioTitle={studio.title}
+                        availability={availability}
+                        getImageUrl={getImageUrl}
+                    />
                 </section>
 
                 {/* Reviews + about */}
                 <section className="mt-6 grid grid-cols-1 gap-6 lg:grid-cols-2">
+
+                    {/* Reviews */}
                     <div className="rounded-2xl border border-[#EFE7FB] bg-white p-5 shadow-[0_18px_45px_-38px_rgba(76,29,149,0.5)] sm:p-6">
                         <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
                             <h2 className="flex items-center gap-2 text-xl font-bold text-[#211638]">
-                                <Star
-                                    className="h-5 w-5 fill-[#8F51EA] text-[#8F51EA]"
-                                    aria-hidden
-                                />
+                                <Star className="h-5 w-5 fill-[#8F51EA] text-[#8F51EA]" />
                                 Reviews ({totalReviews})
                             </h2>
 
@@ -795,9 +639,7 @@ export default function StudioDetails({
                                         key={`${review.name}-${index}`}
                                         className="flex gap-3 py-4 first:pt-1 last:pb-0"
                                     >
-                                        <ReviewerAvatar
-                                            name={review.name}
-                                        />
+                                        <ReviewerAvatar name={review.name} />
 
                                         <div className="min-w-0 flex-1">
                                             <div className="flex flex-wrap items-baseline justify-between gap-x-3">
@@ -832,6 +674,7 @@ export default function StudioDetails({
                         )}
                     </div>
 
+                    {/* About studio */}
                     <div className="relative overflow-hidden rounded-2xl border border-[#EFE7FB] bg-gradient-to-br from-white via-[#FBF7FF] to-[#F1E4FE] p-5 sm:p-6">
                         <div
                             className="pointer-events-none absolute -bottom-6 -right-2 hidden text-[#8F51EA]/10 sm:block"
@@ -847,10 +690,7 @@ export default function StudioDetails({
 
                         <div className="relative">
                             <h2 className="flex items-center gap-2 text-xl font-bold text-[#211638]">
-                                <Building2
-                                    className="h-5 w-5 text-[#8F51EA]"
-                                    aria-hidden
-                                />
+                                <Building2 className="h-5 w-5 text-[#8F51EA]" />
                                 About {studio.title}
                             </h2>
 
@@ -867,10 +707,7 @@ export default function StudioDetails({
                                             key={item}
                                             className="inline-flex items-center gap-1.5"
                                         >
-                                            <CheckCircle2
-                                                className="h-4 w-4 text-[#8F51EA]"
-                                                aria-hidden
-                                            />
+                                            <CheckCircle2 className="h-4 w-4 text-[#8F51EA]" />
                                             {item}
                                         </span>
                                     ))}
@@ -879,262 +716,6 @@ export default function StudioDetails({
                     </div>
                 </section>
             </div>
-
-            {/* Booking modal */}
-            {showBooking && (
-                <div
-                    className="fixed inset-0 z-50 flex items-center justify-center overflow-y-auto bg-[#160c2a]/55 p-4 backdrop-blur-sm"
-                    role="presentation"
-                    onClick={closeBooking}
-                >
-                    <div
-                        role="dialog"
-                        aria-modal="true"
-                        aria-labelledby="booking-title"
-                        className="my-auto w-full max-w-2xl rounded-3xl border border-[#EFE7FB] bg-white p-5 shadow-2xl sm:p-7"
-                        onClick={(event) => event.stopPropagation()}
-                    >
-                        <div className="mb-5 flex items-start justify-between gap-4">
-                            <div>
-                                <h2
-                                    id="booking-title"
-                                    className="text-2xl font-bold text-[#211638]"
-                                >
-                                    Book This Workspace
-                                </h2>
-
-                                <p className="mt-1 text-sm text-[#77718B]">
-                                    Reserve {studio.title} for your next
-                                    session.
-                                </p>
-                            </div>
-
-                            <button
-                                type="button"
-                                onClick={closeBooking}
-                                className="grid h-9 w-9 place-items-center rounded-full text-xl text-[#77718B] transition hover:bg-[#F5EFFE] hover:text-[#8F51EA]"
-                                aria-label="Close booking modal"
-                            >
-                                ×
-                            </button>
-                        </div>
-
-                        {bookingConfirmed ? (
-                            <div className="rounded-2xl bg-[#F7F2FF] p-6 text-center">
-                                <CheckCircle2
-                                    className="mx-auto h-10 w-10 text-[#8F51EA]"
-                                    aria-hidden
-                                />
-
-                                <h3 className="mt-3 text-lg font-bold">
-                                    Booking request ready
-                                </h3>
-
-                                <p className="mt-2 text-sm leading-6 text-[#5B5470]">
-                                    {booking.name.trim()}, we have your
-                                    request for {formatDate(booking.date)} at{" "}
-                                    {booking.time} ({booking.duration}{" "}
-                                    {Number(booking.duration) === 1
-                                        ? "hour"
-                                        : "hours"}
-                                    ). Connect the booking API to confirm
-                                    and save this reservation.
-                                </p>
-
-                                <button
-                                    type="button"
-                                    onClick={closeBooking}
-                                    className="mt-5 rounded-xl bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] px-6 py-2.5 text-sm font-bold text-white"
-                                >
-                                    Done
-                                </button>
-                            </div>
-                        ) : (
-                            <>
-                                <div className="grid gap-6 sm:grid-cols-2">
-                                    <div>
-                                        {mainImage ? (
-                                            // eslint-disable-next-line @next/next/no-img-element
-                                            <img
-                                                src={mainImage}
-                                                alt={studio.title}
-                                                className="h-40 w-full rounded-xl object-cover"
-                                            />
-                                        ) : (
-                                            <div className="grid h-40 w-full place-items-center rounded-xl bg-[#F1E9FD]">
-                                                <CategoryGlyph
-                                                    category={studio.category}
-                                                    className="h-10 w-10 text-[#8F51EA]"
-                                                />
-                                            </div>
-                                        )}
-
-                                        <h3 className="mt-3 text-lg font-bold">
-                                            {studio.title}
-                                        </h3>
-
-                                        <p className="mt-1 flex items-center gap-1.5 text-sm text-[#77718B]">
-                                            <Star
-                                                className="h-4 w-4 fill-amber-400 text-amber-400"
-                                                aria-hidden
-                                            />
-                                            {rating.toFixed(1)} (
-                                            {totalReviews} reviews)
-                                        </p>
-
-                                        <p className="mt-3 text-2xl font-extrabold text-[#7C3AED]">
-                                            {price}{" "}
-                                            <span className="text-sm font-semibold text-[#8A8499]">
-                                                / hr
-                                            </span>
-                                        </p>
-
-                                        {studio.securityDeposit !==
-                                            undefined && (
-                                                <p className="mt-1 text-sm text-[#77718B]">
-                                                    Deposit:{" "}
-                                                    {currency(securityDeposit)}
-                                                </p>
-                                            )}
-                                    </div>
-
-                                    <div className="space-y-4">
-                                        <label className="block text-sm font-semibold">
-                                            Select Date
-
-                                            <input
-                                                type="date"
-                                                min={
-                                                    new Date()
-                                                        .toISOString()
-                                                        .split("T")[0]
-                                                }
-                                                value={booking.date}
-                                                onChange={(event) =>
-                                                    updateBooking(
-                                                        "date",
-                                                        event.target.value
-                                                    )
-                                                }
-                                                className="mt-2 w-full rounded-xl border border-[#E7DBFC] p-3 text-[#211638] outline-none transition focus:border-[#8F51EA] focus:ring-2 focus:ring-[#F0E7FE]"
-                                            />
-                                        </label>
-
-                                        <label className="block text-sm font-semibold">
-                                            Select Time
-
-                                            <input
-                                                type="time"
-                                                value={booking.time}
-                                                onChange={(event) =>
-                                                    updateBooking(
-                                                        "time",
-                                                        event.target.value
-                                                    )
-                                                }
-                                                className="mt-2 w-full rounded-xl border border-[#E7DBFC] p-3 text-[#211638] outline-none transition focus:border-[#8F51EA] focus:ring-2 focus:ring-[#F0E7FE]"
-                                            />
-                                        </label>
-
-                                        <label className="block text-sm font-semibold">
-                                            Duration
-
-                                            <select
-                                                value={booking.duration}
-                                                onChange={(event) =>
-                                                    updateBooking(
-                                                        "duration",
-                                                        event.target.value
-                                                    )
-                                                }
-                                                className="mt-2 w-full rounded-xl border border-[#E7DBFC] bg-white p-3 text-[#211638] outline-none transition focus:border-[#8F51EA] focus:ring-2 focus:ring-[#F0E7FE]"
-                                            >
-                                                {Array.from(
-                                                    { length: 6 },
-                                                    (_, index) => index + 1
-                                                ).map((hours) => (
-                                                    <option
-                                                        key={hours}
-                                                        value={hours}
-                                                    >
-                                                        {hours}{" "}
-                                                        {hours === 1
-                                                            ? "hour"
-                                                            : "hours"}
-                                                    </option>
-                                                ))}
-                                            </select>
-                                        </label>
-
-                                        <label className="block text-sm font-semibold">
-                                            Your Name
-
-                                            <input
-                                                type="text"
-                                                value={booking.name}
-                                                onChange={(event) =>
-                                                    updateBooking(
-                                                        "name",
-                                                        event.target.value
-                                                    )
-                                                }
-                                                placeholder="Enter your name"
-                                                className="mt-2 w-full rounded-xl border border-[#E7DBFC] p-3 text-[#211638] outline-none transition placeholder:text-[#B4AEC2] focus:border-[#8F51EA] focus:ring-2 focus:ring-[#F0E7FE]"
-                                            />
-                                        </label>
-
-                                        <label className="block text-sm font-semibold">
-                                            Email Address
-
-                                            <input
-                                                type="email"
-                                                value={booking.email}
-                                                onChange={(event) =>
-                                                    updateBooking(
-                                                        "email",
-                                                        event.target.value
-                                                    )
-                                                }
-                                                placeholder="you@example.com"
-                                                className="mt-2 w-full rounded-xl border border-[#E7DBFC] p-3 text-[#211638] outline-none transition placeholder:text-[#B4AEC2] focus:border-[#8F51EA] focus:ring-2 focus:ring-[#F0E7FE]"
-                                            />
-                                        </label>
-                                    </div>
-                                </div>
-
-                                {bookingError && (
-                                    <p
-                                        className="mt-4 rounded-xl bg-red-50 p-3 text-sm font-medium text-red-600"
-                                        role="alert"
-                                    >
-                                        {bookingError}
-                                    </p>
-                                )}
-
-                                <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-[#F1E9FD] pt-5">
-                                    <div>
-                                        <p className="text-sm text-[#77718B]">
-                                            Estimated total
-                                        </p>
-
-                                        <p className="text-2xl font-extrabold text-[#7C3AED]">
-                                            {currency(total)}
-                                        </p>
-                                    </div>
-
-                                    <button
-                                        type="button"
-                                        onClick={confirmBooking}
-                                        className="rounded-xl bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] px-7 py-3 font-bold text-white shadow-lg shadow-purple-200 transition hover:brightness-105"
-                                    >
-                                        Confirm Booking
-                                    </button>
-                                </div>
-                            </>
-                        )}
-                    </div>
-                </div>
-            )}
         </main>
     );
 }
