@@ -1,7 +1,10 @@
+
 "use client";
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useSession } from "@/app/lib/auth-client";
 import {
     ArrowRight,
     BadgeCheck,
@@ -28,7 +31,6 @@ type Booking = {
     time: string;
     duration: string;
     name: string;
-    email: string;
 };
 
 type BookingCardProps = {
@@ -83,6 +85,9 @@ export default function BookingCard({
     getImageUrl = (path) => path,
     studio,
 }: BookingCardProps) {
+    const router = useRouter();
+    const { data: session, isPending } = useSession();
+
     const [showBooking, setShowBooking] = useState(false);
     const [bookingConfirmed, setBookingConfirmed] = useState(false);
     const [bookingError, setBookingError] = useState("");
@@ -92,8 +97,7 @@ export default function BookingCard({
         date: "",
         time: "",
         duration: "1",
-        name: "",
-        email: "",
+        name: session?.user?.name || "",
     });
 
     const price = Number(
@@ -122,6 +126,30 @@ export default function BookingCard({
             dateStyle: "medium",
         }).format(new Date(`${date}T00:00:00`));
 
+    // LOGIN PROTECTION
+    const handleBookNow = () => {
+        if (isPending) return;
+
+        if (!session?.user) {
+            const currentPath = window.location.pathname;
+
+            router.push(
+                `/login?callbackUrl=${encodeURIComponent(currentPath)}`
+            );
+
+            return;
+        }
+
+        setBooking((current) => ({
+            ...current,
+            name: session.user.name || current.name,
+        }));
+
+        setBookingConfirmed(false);
+        setBookingError("");
+        setShowBooking(true);
+    };
+
     const closeBooking = () => {
         if (isSubmitting) return;
 
@@ -140,6 +168,11 @@ export default function BookingCard({
     };
 
     const confirmBooking = async () => {
+        if (isPending || !session?.user) {
+            setBookingError("Please log in before booking.");
+            return;
+        }
+
         if (!booking.date || !booking.time) {
             setBookingError("Please select a date and start time.");
             return;
@@ -150,17 +183,15 @@ export default function BookingCard({
             return;
         }
 
-        if (!booking.name.trim() || !booking.email.trim()) {
-            setBookingError("Please enter your name and email.");
+        if (!booking.name.trim()) {
+            setBookingError("Please enter your name.");
             return;
         }
 
-        if (
-            !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(
-                booking.email.trim()
-            )
-        ) {
-            setBookingError("Please enter a valid email address.");
+        const userEmail = session.user.email;
+
+        if (!userEmail) {
+            setBookingError("Your account email is not available.");
             return;
         }
 
@@ -179,6 +210,7 @@ export default function BookingCard({
 
             const response = await fetch(`${API_URL}/bookings`, {
                 method: "POST",
+                credentials: "include",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -189,7 +221,7 @@ export default function BookingCard({
                     category: studio.category || "",
                     location: studio.location || "",
                     userName: booking.name.trim(),
-                    userEmail: booking.email.trim().toLowerCase(),
+                    userEmail: userEmail.trim().toLowerCase(),
                     date: booking.date,
                     time: booking.time,
                     duration,
@@ -229,16 +261,15 @@ export default function BookingCard({
             <aside className="space-y-5">
                 <button
                     type="button"
-                    onClick={() => {
-                        setBookingConfirmed(false);
-                        setBookingError("");
-                        setShowBooking(true);
-                    }}
-                    className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#8B5CF6] via-[#A855F7] to-[#EC4899] px-5 py-4 text-sm font-bold text-white shadow-lg shadow-purple-300/40 transition hover:-translate-y-0.5 hover:shadow-xl sm:text-base"
+                    onClick={handleBookNow}
+                    disabled={isPending}
+                    className="group flex w-full items-center justify-center gap-2 rounded-2xl bg-gradient-to-r from-[#8B5CF6] via-[#A855F7] to-[#EC4899] px-5 py-4 text-sm font-bold text-white shadow-lg shadow-purple-300/40 transition hover:-translate-y-0.5 hover:shadow-xl disabled:cursor-wait disabled:opacity-60 sm:text-base"
                 >
                     <CalendarDays className="h-5 w-5" />
-                    Book Workspace Now
-                    <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                    {isPending ? "Checking Login..." : "Book Workspace Now"}
+                    {!isPending && (
+                        <ArrowRight className="h-4 w-4 transition group-hover:translate-x-1" />
+                    )}
                 </button>
 
                 {/* HOST INFORMATION */}
@@ -525,13 +556,9 @@ export default function BookingCard({
 
                                                 <input
                                                     type="email"
-                                                    value={booking.email}
-                                                    onChange={(event) =>
-                                                        updateBooking("email", event.target.value)
-                                                    }
-                                                    placeholder="you@example.com"
-                                                    required
-                                                    className={inputClass}
+                                                    value={session?.user?.email || ""}
+                                                    readOnly
+                                                    className={`${inputClass} cursor-not-allowed opacity-70`}
                                                 />
                                             </label>
                                         </div>
@@ -547,7 +574,7 @@ export default function BookingCard({
                                     )}
                                 </div>
 
-                                {/* ALWAYS VISIBLE CONFIRM BUTTON */}
+                                {/* CONFIRM BUTTON */}
                                 <div className="flex shrink-0 flex-wrap items-center justify-between gap-4 border-t border-[#F1E9FD] bg-white p-5 dark:border-[#49375F] dark:bg-[#211a30] sm:p-6">
                                     <div>
                                         <p className="text-sm text-[#77718B] dark:text-gray-400">

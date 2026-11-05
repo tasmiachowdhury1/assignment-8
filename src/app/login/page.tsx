@@ -1,9 +1,10 @@
+
 "use client";
 
 import { useState } from "react";
 import type { FormEvent } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { authClient } from "@/app/lib/auth-client";
 
 import {
@@ -21,6 +22,7 @@ import { Input } from "@/components/ui/input";
 
 export default function LoginPage() {
     const router = useRouter();
+    const searchParams = useSearchParams();
 
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -29,10 +31,9 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const [googleLoading, setGoogleLoading] = useState(false);
 
-    // Get the intended destination, or go to homepage.
+    // Get the intended destination safely.
     const getRedirectPath = () => {
-        const params = new URLSearchParams(window.location.search);
-        const callbackURL = params.get("callbackUrl");
+        const callbackURL = searchParams.get("callbackUrl");
 
         if (
             callbackURL?.startsWith("/") &&
@@ -70,7 +71,7 @@ export default function LoginPage() {
 
             toast.success("Login successful!");
 
-            router.push(callbackURL);
+            router.replace(callbackURL);
             router.refresh();
 
         } catch {
@@ -161,7 +162,6 @@ export default function LoginPage() {
                             onSubmit={handleLogin}
                             className="space-y-4"
                         >
-
                             {/* Email */}
                             <div className="relative">
                                 <Mail
