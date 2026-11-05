@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useCallback, useEffect, useMemo, useState } from "react";
@@ -352,19 +351,19 @@ export default function MyBookingsPage() {
     const getStatusStyle = (status: Booking["status"]) => {
         switch (status) {
             case "Pending":
-                return "bg-yellow-100 text-yellow-700";
+                return "bg-yellow-100 text-yellow-700 dark:bg-yellow-500/15 dark:text-yellow-400";
 
             case "Confirmed":
-                return "bg-green-100 text-green-700";
+                return "bg-green-100 text-green-700 dark:bg-green-500/15 dark:text-green-400";
 
             case "Completed":
-                return "bg-blue-100 text-blue-700";
+                return "bg-blue-100 text-blue-700 dark:bg-blue-500/15 dark:text-blue-400";
 
             case "Cancelled":
-                return "bg-red-100 text-red-700";
+                return "bg-red-100 text-red-700 dark:bg-red-500/15 dark:text-red-400";
 
             default:
-                return "bg-gray-100 text-gray-700";
+                return "bg-gray-100 text-gray-700 dark:bg-white/10 dark:text-gray-300";
         }
     };
 
@@ -374,16 +373,16 @@ export default function MyBookingsPage() {
 
     if (sessionLoading || loading) {
         return (
-            <main className="min-h-screen bg-[#F8F3FF]">
+            <main className="min-h-screen bg-[#F8F3FF] dark:bg-[#15111f]">
                 <BookingsHeader />
 
                 <div className="flex min-h-[300px] items-center justify-center">
                     <Loader2
-                        className="animate-spin text-purple-600"
+                        className="animate-spin text-purple-600 dark:text-[#a875f5]"
                         size={35}
                     />
 
-                    <span className="ml-3 text-gray-600">
+                    <span className="ml-3 text-gray-600 dark:text-gray-300">
                         Loading your bookings...
                     </span>
                 </div>
@@ -397,26 +396,26 @@ export default function MyBookingsPage() {
 
     if (!email) {
         return (
-            <main className="min-h-screen bg-[#F8F3FF]">
+            <main className="min-h-screen bg-[#F8F3FF] dark:bg-[#15111f]">
                 <BookingsHeader />
 
                 <div className="mx-auto max-w-2xl px-6 py-20 text-center">
                     <AlertCircle
                         size={45}
-                        className="mx-auto mb-4 text-purple-500"
+                        className="mx-auto mb-4 text-purple-500 dark:text-[#a875f5]"
                     />
 
-                    <h2 className="text-2xl font-bold text-[#211638]">
+                    <h2 className="text-2xl font-bold text-[#211638] dark:text-white">
                         Please sign in
                     </h2>
 
-                    <p className="mt-3 text-gray-600">
+                    <p className="mt-3 text-gray-600 dark:text-gray-400">
                         Sign in to view and manage your studio bookings.
                     </p>
 
                     <Link
                         href="/sign-in"
-                        className="mt-6 inline-block rounded-full bg-purple-600 px-7 py-3 text-sm font-semibold text-white transition hover:bg-purple-700"
+                        className="mt-6 inline-block rounded-full bg-purple-600 px-7 py-3 text-sm font-semibold text-white transition hover:bg-purple-700 dark:bg-[#a875f5] dark:text-[#170f25] dark:hover:bg-[#9560e8]"
                     >
                         Sign In
                     </Link>
@@ -430,7 +429,7 @@ export default function MyBookingsPage() {
     // ==========================================
 
     return (
-        <main className="min-h-screen bg-[#F8F3FF] pb-20">
+        <main className="min-h-screen bg-[#F8F3FF] pb-20 dark:bg-[#15111f]">
             <BookingsHeader />
 
             <section className="mx-auto max-w-7xl px-5 py-12 md:px-8">
@@ -439,21 +438,21 @@ export default function MyBookingsPage() {
 
                 <div className="mb-8 flex flex-col justify-between gap-4 md:flex-row md:items-center">
                     <div>
-                        <h2 className="text-2xl font-bold text-[#211638]">
+                        <h2 className="text-2xl font-bold text-[#211638] dark:text-white">
                             Your Reservations
                         </h2>
 
-                        <p className="mt-2 text-sm text-gray-500">
+                        <p className="mt-2 text-sm text-gray-500 dark:text-gray-400">
                             View and manage all your studio reservations.
                         </p>
                     </div>
 
-                    <div className="rounded-xl bg-white px-5 py-3 shadow-sm">
-                        <p className="text-sm text-gray-500">
+                    <div className="rounded-xl bg-white px-5 py-3 shadow-sm dark:border dark:border-[#49375F] dark:bg-[#211a30]">
+                        <p className="text-sm text-gray-500 dark:text-gray-400">
                             Total Bookings
                         </p>
 
-                        <p className="text-2xl font-bold text-purple-600">
+                        <p className="text-2xl font-bold text-purple-600 dark:text-[#a875f5]">
                             {bookings.length}
                         </p>
                     </div>
@@ -464,8 +463,8 @@ export default function MyBookingsPage() {
                 {message && (
                     <div
                         className={`mb-6 rounded-xl border px-4 py-3 text-sm ${messageType === "error"
-                                ? "border-red-200 bg-red-50 text-red-700"
-                                : "border-green-200 bg-green-50 text-green-700"
+                                ? "border-red-200 bg-red-50 text-red-700 dark:border-red-500/30 dark:bg-red-500/10 dark:text-red-400"
+                                : "border-green-200 bg-green-50 text-green-700 dark:border-green-500/30 dark:bg-green-500/10 dark:text-green-400"
                             }`}
                     >
                         {message}
@@ -489,8 +488,8 @@ export default function MyBookingsPage() {
                                 key={filter}
                                 onClick={() => setActiveFilter(filter)}
                                 className={`rounded-full px-5 py-2.5 text-sm font-semibold transition ${activeFilter === filter
-                                        ? "bg-purple-600 text-white shadow-md"
-                                        : "border border-purple-100 bg-white text-gray-600 hover:bg-purple-50"
+                                        ? "bg-purple-600 text-white shadow-md dark:bg-[#a875f5] dark:text-[#170f25]"
+                                        : "border border-purple-100 bg-white text-gray-600 hover:bg-purple-50 dark:border-[#49375F] dark:bg-[#211a30] dark:text-gray-300 dark:hover:bg-[#302441]"
                                     }`}
                             >
                                 {filter} ({count})
@@ -505,7 +504,7 @@ export default function MyBookingsPage() {
                     <div className="mb-6 text-center">
                         <button
                             onClick={fetchBookings}
-                            className="inline-flex items-center gap-2 rounded-full bg-purple-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-purple-700"
+                            className="inline-flex items-center gap-2 rounded-full bg-purple-600 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-purple-700 dark:bg-[#a875f5] dark:text-[#170f25] dark:hover:bg-[#9560e8]"
                         >
                             <RefreshCw size={16} />
                             Try Again
@@ -516,19 +515,19 @@ export default function MyBookingsPage() {
                 {/* BOOKING CARDS */}
 
                 {filteredBookings.length === 0 ? (
-                    <div className="rounded-2xl border border-purple-100 bg-white px-6 py-16 text-center shadow-sm">
+                    <div className="rounded-2xl border border-purple-100 bg-white px-6 py-16 text-center shadow-sm dark:border-[#49375F] dark:bg-[#211a30]">
                         <CalendarDays
                             size={48}
-                            className="mx-auto mb-4 text-purple-400"
+                            className="mx-auto mb-4 text-purple-400 dark:text-[#a875f5]"
                         />
 
-                        <h3 className="text-xl font-bold text-[#211638]">
+                        <h3 className="text-xl font-bold text-[#211638] dark:text-white">
                             {bookings.length === 0
                                 ? "No bookings yet"
                                 : "No bookings found"}
                         </h3>
 
-                        <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-gray-500">
+                        <p className="mx-auto mt-3 max-w-md text-sm leading-6 text-gray-500 dark:text-gray-400">
                             {bookings.length === 0
                                 ? "You haven't booked any studios yet. Explore our studios and book your perfect creative space."
                                 : `You don't have any ${activeFilter.toLowerCase()} bookings.`}
@@ -536,7 +535,7 @@ export default function MyBookingsPage() {
 
                         <Link
                             href="/studios"
-                            className="mt-6 inline-block rounded-full bg-purple-600 px-7 py-3 text-sm font-semibold text-white transition hover:bg-purple-700"
+                            className="mt-6 inline-block rounded-full bg-purple-600 px-7 py-3 text-sm font-semibold text-white transition hover:bg-purple-700 dark:bg-[#a875f5] dark:text-[#170f25] dark:hover:bg-[#9560e8]"
                         >
                             Explore Studios
                         </Link>
@@ -558,7 +557,7 @@ export default function MyBookingsPage() {
                             return (
                                 <article
                                     key={booking._id}
-                                    className="overflow-hidden rounded-2xl border border-purple-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg"
+                                    className="overflow-hidden rounded-2xl border border-purple-100 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg dark:border-[#49375F] dark:bg-[#211a30] dark:hover:shadow-purple-950/30"
                                 >
                                     {/* STUDIO IMAGE */}
 
@@ -569,10 +568,10 @@ export default function MyBookingsPage() {
                                             className="h-52 w-full object-cover"
                                         />
                                     ) : (
-                                        <div className="flex h-52 items-center justify-center bg-purple-100">
+                                        <div className="flex h-52 items-center justify-center bg-purple-100 dark:bg-[#302441]">
                                             <CalendarDays
                                                 size={45}
-                                                className="text-purple-400"
+                                                className="text-purple-400 dark:text-[#a875f5]"
                                             />
                                         </div>
                                     )}
@@ -583,13 +582,13 @@ export default function MyBookingsPage() {
 
                                         <div className="flex flex-wrap items-start justify-between gap-3">
                                             <div>
-                                                <h3 className="text-xl font-bold text-[#211638]">
+                                                <h3 className="text-xl font-bold text-[#211638] dark:text-white">
                                                     {booking.title ||
                                                         booking.studioTitle ||
                                                         "Studio Booking"}
                                                 </h3>
 
-                                                <p className="mt-1 text-sm text-purple-600">
+                                                <p className="mt-1 text-sm text-purple-600 dark:text-[#b995fa]">
                                                     {booking.category || "Studio"}
                                                 </p>
                                             </div>
@@ -606,40 +605,40 @@ export default function MyBookingsPage() {
                                         {/* BOOKING INFORMATION */}
 
                                         <div className="mt-5 grid grid-cols-2 gap-4 text-sm">
-                                            <div className="flex items-center gap-2 text-gray-600">
+                                            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                                                 <CalendarDays
                                                     size={17}
-                                                    className="shrink-0 text-purple-500"
+                                                    className="shrink-0 text-purple-500 dark:text-[#a875f5]"
                                                 />
                                                 <span>
                                                     {booking.date || "Date unavailable"}
                                                 </span>
                                             </div>
 
-                                            <div className="flex items-center gap-2 text-gray-600">
+                                            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                                                 <Clock
                                                     size={17}
-                                                    className="shrink-0 text-purple-500"
+                                                    className="shrink-0 text-purple-500 dark:text-[#a875f5]"
                                                 />
                                                 <span>
                                                     {booking.time || "Time unavailable"}
                                                 </span>
                                             </div>
 
-                                            <div className="flex items-center gap-2 text-gray-600">
+                                            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                                                 <MapPin
                                                     size={17}
-                                                    className="shrink-0 text-purple-500"
+                                                    className="shrink-0 text-purple-500 dark:text-[#a875f5]"
                                                 />
                                                 <span>
                                                     {booking.location || "Location unavailable"}
                                                 </span>
                                             </div>
 
-                                            <div className="flex items-center gap-2 text-gray-600">
+                                            <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
                                                 <Clock
                                                     size={17}
-                                                    className="shrink-0 text-purple-500"
+                                                    className="shrink-0 text-purple-500 dark:text-[#a875f5]"
                                                 />
                                                 <span>
                                                     {booking.duration || 0} hours
@@ -649,13 +648,13 @@ export default function MyBookingsPage() {
 
                                         {/* PRICE AND ACTIONS */}
 
-                                        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-purple-100 pt-5">
+                                        <div className="mt-6 flex flex-wrap items-center justify-between gap-4 border-t border-purple-100 pt-5 dark:border-[#49375F]">
                                             <div>
-                                                <p className="text-xs text-gray-500">
+                                                <p className="text-xs text-gray-500 dark:text-gray-400">
                                                     Total Amount
                                                 </p>
 
-                                                <p className="mt-1 flex items-center gap-1 text-xl font-bold text-purple-700">
+                                                <p className="mt-1 flex items-center gap-1 text-xl font-bold text-purple-700 dark:text-[#b995fa]">
                                                     <CreditCard size={18} />
                                                     $
                                                     {Number(
@@ -732,7 +731,7 @@ export default function MyBookingsPage() {
                                                             )
                                                         }
                                                         disabled={isBusy}
-                                                        className="flex items-center gap-2 rounded-full border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50"
+                                                        className="flex items-center gap-2 rounded-full border border-red-200 px-4 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50 disabled:cursor-not-allowed disabled:opacity-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10"
                                                     >
                                                         {cancellingId === booking._id ? (
                                                             <Loader2

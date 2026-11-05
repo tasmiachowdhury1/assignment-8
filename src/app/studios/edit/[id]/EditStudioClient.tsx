@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
@@ -57,6 +56,12 @@ const categories = [
     "Music Suite",
     "Art Workshop",
 ];
+
+const inputClass =
+    "w-full rounded-lg border border-purple-200 bg-white px-4 py-3 text-gray-800 outline-none transition placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-100 dark:border-[#49375F] dark:bg-[#15111f] dark:text-gray-100 dark:placeholder:text-gray-500 dark:focus:border-[#a875f5] dark:focus:ring-purple-900/40";
+
+const labelClass =
+    "mb-2 block text-sm font-semibold text-[#292044] dark:text-gray-200";
 
 export default function EditStudioPage() {
     const params = useParams();
@@ -218,26 +223,26 @@ export default function EditStudioPage() {
 
     if (isPending || isLoading || (!session && !isPending)) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-[#F7F4FF]">
-                <Loader2 className="h-9 w-9 animate-spin text-purple-600" />
+            <div className="flex min-h-screen items-center justify-center bg-[#F7F4FF] dark:bg-[#15111f]">
+                <Loader2 className="h-9 w-9 animate-spin text-purple-600 dark:text-[#a875f5]" />
             </div>
         );
     }
 
     if (!studio) {
         return (
-            <div className="flex min-h-screen flex-col items-center justify-center bg-[#F7F4FF] px-4 text-center">
-                <h2 className="text-2xl font-bold text-[#292044]">
+            <div className="flex min-h-screen flex-col items-center justify-center bg-[#F7F4FF] px-4 text-center dark:bg-[#15111f]">
+                <h2 className="text-2xl font-bold text-[#292044] dark:text-gray-100">
                     Studio Not Found
                 </h2>
 
-                <p className="mt-2 text-gray-500">
+                <p className="mt-2 text-gray-500 dark:text-gray-400">
                     This studio could not be found or you cannot edit it.
                 </p>
 
                 <Link
                     href="/my-listings"
-                    className="mt-6 rounded-lg bg-purple-600 px-6 py-3 font-semibold text-white hover:bg-purple-700"
+                    className="mt-6 rounded-lg bg-purple-600 px-6 py-3 font-semibold text-white transition hover:bg-purple-700"
                 >
                     Back to My Listings
                 </Link>
@@ -246,73 +251,73 @@ export default function EditStudioPage() {
     }
 
     return (
-        <section className="min-h-screen bg-[#F7F4FF] px-4 py-12 sm:px-6">
+        <section className="min-h-screen bg-[#F7F4FF] px-4 py-12 transition-colors duration-300 dark:bg-[#15111f] sm:px-6">
             <div className="mx-auto max-w-3xl">
                 <Link
                     href="/my-listings"
-                    className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-purple-700 transition hover:text-purple-900"
+                    className="mb-6 inline-flex items-center gap-2 text-sm font-semibold text-purple-700 transition hover:text-purple-900 dark:text-[#b995f8] dark:hover:text-[#d2b9ff]"
                 >
                     <ArrowLeft size={18} />
                     Back to My Listings
                 </Link>
 
                 <div className="mb-8">
-                    <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-purple-600">
+                    <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-purple-600 dark:text-[#a875f5]">
                         Manage Your Listing
                     </p>
 
-                    <h1 className="text-3xl font-bold text-[#292044] sm:text-4xl">
+                    <h1 className="text-3xl font-bold text-[#292044] dark:text-gray-100 sm:text-4xl">
                         Update Studio
                     </h1>
 
-                    <p className="mt-2 text-gray-500">
+                    <p className="mt-2 text-gray-500 dark:text-gray-400">
                         Update your studio information below.
                     </p>
                 </div>
 
                 <form
                     onSubmit={handleSubmit}
-                    className="space-y-6 rounded-2xl border border-purple-100 bg-white p-6 shadow-lg sm:p-9"
+                    className="space-y-6 rounded-2xl border border-purple-100 bg-white p-6 shadow-lg transition-colors duration-300 dark:border-[#49375F] dark:bg-[#211a30] sm:p-9"
                 >
                     {/* Read-only host information */}
-                    <div className="rounded-xl border border-purple-100 bg-purple-50 p-5">
-                        <h2 className="mb-4 flex items-center gap-2 font-bold text-[#292044]">
-                            <User size={19} className="text-purple-600" />
+                    <div className="rounded-xl border border-purple-100 bg-purple-50 p-5 dark:border-[#49375F] dark:bg-[#2b2140]">
+                        <h2 className="mb-4 flex items-center gap-2 font-bold text-[#292044] dark:text-gray-100">
+                            <User size={19} className="text-purple-600 dark:text-[#a875f5]" />
                             Host Information
                         </h2>
 
                         <div className="grid gap-4 sm:grid-cols-2">
                             <div>
-                                <p className="mb-1 text-xs font-medium text-gray-500">
+                                <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
                                     Host Name
                                 </p>
 
-                                <div className="flex items-center gap-2 rounded-lg border border-purple-100 bg-white px-3 py-3 text-sm text-gray-700">
-                                    <User size={16} className="text-purple-500" />
+                                <div className="flex items-center gap-2 rounded-lg border border-purple-100 bg-white px-3 py-3 text-sm text-gray-700 dark:border-[#49375F] dark:bg-[#15111f] dark:text-gray-200">
+                                    <User size={16} className="text-purple-500 dark:text-[#a875f5]" />
                                     {hostName}
                                 </div>
                             </div>
 
                             <div>
-                                <p className="mb-1 text-xs font-medium text-gray-500">
+                                <p className="mb-1 text-xs font-medium text-gray-500 dark:text-gray-400">
                                     Host Email
                                 </p>
 
-                                <div className="flex items-center gap-2 rounded-lg border border-purple-100 bg-white px-3 py-3 text-sm text-gray-700">
-                                    <Mail size={16} className="shrink-0 text-purple-500" />
+                                <div className="flex items-center gap-2 rounded-lg border border-purple-100 bg-white px-3 py-3 text-sm text-gray-700 dark:border-[#49375F] dark:bg-[#15111f] dark:text-gray-200">
+                                    <Mail size={16} className="shrink-0 text-purple-500 dark:text-[#a875f5]" />
                                     <span className="truncate">{email}</span>
                                 </div>
                             </div>
                         </div>
 
-                        <p className="mt-3 text-xs text-gray-500">
+                        <p className="mt-3 text-xs text-gray-500 dark:text-gray-400">
                             Host information cannot be changed.
                         </p>
                     </div>
 
                     {/* Studio name */}
                     <div>
-                        <label htmlFor="title" className="mb-2 block text-sm font-semibold text-[#292044]">
+                        <label htmlFor="title" className={labelClass}>
                             Studio Name
                         </label>
 
@@ -324,13 +329,13 @@ export default function EditStudioPage() {
                             onChange={handleChange}
                             required
                             placeholder="Enter studio name"
-                            className="w-full rounded-lg border border-purple-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                            className={inputClass}
                         />
                     </div>
 
                     {/* Image URL */}
                     <div>
-                        <label htmlFor="imageUrl" className="mb-2 block text-sm font-semibold text-[#292044]">
+                        <label htmlFor="imageUrl" className={labelClass}>
                             Studio Image URL
                         </label>
 
@@ -342,13 +347,13 @@ export default function EditStudioPage() {
                             onChange={handleChange}
                             required
                             placeholder="https://example.com/image.jpg"
-                            className="w-full rounded-lg border border-purple-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                            className={inputClass}
                         />
                     </div>
 
                     {/* Category */}
                     <div>
-                        <label htmlFor="category" className="mb-2 block text-sm font-semibold text-[#292044]">
+                        <label htmlFor="category" className={labelClass}>
                             Category
                         </label>
 
@@ -358,7 +363,7 @@ export default function EditStudioPage() {
                             value={formData.category}
                             onChange={handleChange}
                             required
-                            className="w-full rounded-lg border border-purple-200 bg-white px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                            className={inputClass}
                         >
                             <option value="">Select a category</option>
 
@@ -372,7 +377,7 @@ export default function EditStudioPage() {
 
                     {/* Hourly price */}
                     <div>
-                        <label htmlFor="pricePerHour" className="mb-2 block text-sm font-semibold text-[#292044]">
+                        <label htmlFor="pricePerHour" className={labelClass}>
                             Price Per Hour ($)
                         </label>
 
@@ -385,13 +390,13 @@ export default function EditStudioPage() {
                             onChange={handleChange}
                             required
                             placeholder="Enter hourly price"
-                            className="w-full rounded-lg border border-purple-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                            className={inputClass}
                         />
                     </div>
 
                     {/* Rating */}
                     <div>
-                        <label htmlFor="rating" className="mb-2 block text-sm font-semibold text-[#292044]">
+                        <label htmlFor="rating" className={labelClass}>
                             Studio Rating (0–5)
                         </label>
 
@@ -406,13 +411,13 @@ export default function EditStudioPage() {
                             onChange={handleChange}
                             required
                             placeholder="Example: 4.5"
-                            className="w-full rounded-lg border border-purple-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                            className={inputClass}
                         />
                     </div>
 
                     {/* Location */}
                     <div>
-                        <label htmlFor="location" className="mb-2 block text-sm font-semibold text-[#292044]">
+                        <label htmlFor="location" className={labelClass}>
                             Location
                         </label>
 
@@ -424,15 +429,15 @@ export default function EditStudioPage() {
                             onChange={handleChange}
                             required
                             placeholder="Enter studio location"
-                            className="w-full rounded-lg border border-purple-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                            className={inputClass}
                         />
                     </div>
 
                     {/* Actions */}
-                    <div className="flex flex-col gap-3 border-t border-gray-100 pt-6 sm:flex-row">
+                    <div className="flex flex-col gap-3 border-t border-gray-100 pt-6 dark:border-[#49375F] sm:flex-row">
                         <Link
                             href="/my-listings"
-                            className="flex flex-1 items-center justify-center rounded-xl border border-gray-200 px-5 py-3 font-semibold text-gray-600 transition hover:bg-gray-50"
+                            className="flex flex-1 items-center justify-center rounded-xl border border-gray-200 px-5 py-3 font-semibold text-gray-600 transition hover:bg-gray-50 dark:border-[#49375F] dark:text-gray-300 dark:hover:bg-[#2b2140]"
                         >
                             Cancel
                         </Link>

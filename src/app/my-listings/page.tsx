@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
@@ -140,34 +139,36 @@ export default function MyListingsPage() {
 
     if (isPending || (!session && !isPending)) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-[#F7F4FF]">
-                <Loader2 className="h-8 w-8 animate-spin text-purple-600" />
+            <div className="flex min-h-screen items-center justify-center bg-[#F7F4FF] dark:bg-[#15111f]">
+                <Loader2 className="h-8 w-8 animate-spin text-purple-600 dark:text-[#a875f5]" />
             </div>
         );
     }
 
     return (
-        <section className="min-h-screen bg-[#F7F4FF] px-4 py-12 sm:px-6 lg:px-8">
+        <section className="min-h-screen bg-[#F7F4FF] px-4 py-12 dark:bg-[#15111f] sm:px-6 lg:px-8">
             <div className="mx-auto max-w-7xl">
+
                 {/* Header */}
+
                 <div className="mb-10 flex flex-col justify-between gap-5 sm:flex-row sm:items-center">
                     <div>
-                        <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-purple-600">
+                        <p className="mb-2 text-sm font-semibold uppercase tracking-[0.2em] text-purple-600 dark:text-[#b995fa]">
                             StudioSpace Dashboard
                         </p>
 
-                        <h1 className="text-3xl font-bold text-[#292044] sm:text-4xl">
+                        <h1 className="text-3xl font-bold text-[#292044] dark:text-white sm:text-4xl">
                             My Studio Listings
                         </h1>
 
-                        <p className="mt-2 text-gray-500">
+                        <p className="mt-2 text-gray-500 dark:text-gray-400">
                             Manage and update your creative spaces.
                         </p>
                     </div>
 
                     <Link
                         href="/add-newstudio"
-                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 px-6 py-3 font-semibold text-white shadow-md transition hover:scale-[1.02] hover:from-purple-700 hover:to-pink-600"
+                        className="inline-flex items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-pink-500 px-6 py-3 font-semibold text-white shadow-md transition hover:scale-[1.02] hover:from-purple-700 hover:to-pink-600 dark:from-[#a875f5] dark:to-[#c084fc] dark:text-[#170f25] dark:hover:from-[#9560e8] dark:hover:to-[#ad65ed]"
                     >
                         <Plus size={20} />
                         Add New Studio
@@ -175,11 +176,13 @@ export default function MyListingsPage() {
                 </div>
 
                 {/* Count */}
-                <div className="mb-6 flex items-center gap-2 text-sm text-gray-600">
-                    <Building2 size={18} className="text-purple-600" />
+
+                <div className="mb-6 flex items-center gap-2 text-sm text-gray-600 dark:text-gray-300">
+                    <Building2 size={18} className="text-purple-600 dark:text-[#a875f5]" />
+
                     <span>
                         You have{" "}
-                        <strong className="text-[#292044]">
+                        <strong className="text-[#292044] dark:text-white">
                             {studios.length}
                         </strong>{" "}
                         studio listing(s).
@@ -187,46 +190,51 @@ export default function MyListingsPage() {
                 </div>
 
                 {/* Loading */}
+
                 {isLoading ? (
                     <div className="flex min-h-[300px] items-center justify-center">
-                        <Loader2 className="h-10 w-10 animate-spin text-purple-600" />
+                        <Loader2 className="h-10 w-10 animate-spin text-purple-600 dark:text-[#a875f5]" />
                     </div>
                 ) : studios.length === 0 ? (
+
                     /* Empty state */
-                    <div className="rounded-2xl border border-purple-100 bg-white px-6 py-16 text-center shadow-sm">
-                        <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-purple-50">
+
+                    <div className="rounded-2xl border border-purple-100 bg-white px-6 py-16 text-center shadow-sm dark:border-[#49375F] dark:bg-[#211a30]">
+                        <div className="mx-auto mb-5 flex h-16 w-16 items-center justify-center rounded-full bg-purple-50 dark:bg-[#302441]">
                             <Building2
                                 size={30}
-                                className="text-purple-600"
+                                className="text-purple-600 dark:text-[#a875f5]"
                             />
                         </div>
 
-                        <h2 className="text-2xl font-bold text-[#292044]">
+                        <h2 className="text-2xl font-bold text-[#292044] dark:text-white">
                             No Studios Found
                         </h2>
 
-                        <p className="mx-auto mt-2 max-w-md text-gray-500">
+                        <p className="mx-auto mt-2 max-w-md text-gray-500 dark:text-gray-400">
                             You haven't added any studios yet. Add your
                             first studio and share your creative space.
                         </p>
 
                         <Link
                             href="/add-newstudio"
-                            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-purple-600 px-6 py-3 font-semibold text-white transition hover:bg-purple-700"
+                            className="mt-6 inline-flex items-center gap-2 rounded-xl bg-purple-600 px-6 py-3 font-semibold text-white transition hover:bg-purple-700 dark:bg-[#a875f5] dark:text-[#170f25] dark:hover:bg-[#9560e8]"
                         >
                             <Plus size={19} />
                             Add Your First Studio
                         </Link>
                     </div>
                 ) : (
+
                     /* Studio cards */
+
                     <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
                         {studios.map((studio) => (
                             <div
                                 key={studio._id}
-                                className="overflow-hidden rounded-2xl border border-purple-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg"
+                                className="overflow-hidden rounded-2xl border border-purple-100 bg-white shadow-sm transition duration-300 hover:-translate-y-1 hover:shadow-lg dark:border-[#49375F] dark:bg-[#211a30] dark:hover:shadow-purple-950/30"
                             >
-                                <div className="relative h-56 w-full bg-purple-50">
+                                <div className="relative h-56 w-full bg-purple-50 dark:bg-[#302441]">
                                     <Image
                                         src={
                                             studio.image ||
@@ -239,14 +247,14 @@ export default function MyListingsPage() {
                                         className="object-cover"
                                     />
 
-                                    <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-purple-700 shadow-sm">
+                                    <span className="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-purple-700 shadow-sm dark:bg-[#211a30]/95 dark:text-[#c4a5fd]">
                                         {studio.category}
                                     </span>
                                 </div>
 
                                 <div className="p-5">
                                     <div className="mb-3 flex items-start justify-between gap-3">
-                                        <h2 className="text-xl font-bold text-[#292044]">
+                                        <h2 className="text-xl font-bold text-[#292044] dark:text-white">
                                             {studio.title}
                                         </h2>
 
@@ -259,25 +267,25 @@ export default function MyListingsPage() {
                                         </div>
                                     </div>
 
-                                    <div className="mb-4 flex items-center gap-2 text-sm text-gray-500">
+                                    <div className="mb-4 flex items-center gap-2 text-sm text-gray-500 dark:text-gray-400">
                                         <MapPin
                                             size={17}
-                                            className="shrink-0 text-purple-500"
+                                            className="shrink-0 text-purple-500 dark:text-[#a875f5]"
                                         />
                                         <span>{studio.location}</span>
                                     </div>
 
-                                    <p className="mb-5 text-lg font-bold text-purple-700">
+                                    <p className="mb-5 text-lg font-bold text-purple-700 dark:text-[#b995fa]">
                                         ${studio.pricePerHour}
-                                        <span className="text-sm font-normal text-gray-500">
+                                        <span className="text-sm font-normal text-gray-500 dark:text-gray-400">
                                             {" "}/ hour
                                         </span>
                                     </p>
 
-                                    <div className="flex gap-3 border-t border-gray-100 pt-4">
+                                    <div className="flex gap-3 border-t border-gray-100 pt-4 dark:border-[#49375F]">
                                         <Link
                                             href={`/studios/edit/${studio._id}`}
-                                            className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-purple-200 px-3 py-2.5 text-sm font-semibold text-purple-700 transition hover:bg-purple-50"
+                                            className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-purple-200 px-3 py-2.5 text-sm font-semibold text-purple-700 transition hover:bg-purple-50 dark:border-[#75549a] dark:text-[#c4a5fd] dark:hover:bg-[#302441]"
                                         >
                                             <Pencil size={16} />
                                             Update
@@ -288,7 +296,7 @@ export default function MyListingsPage() {
                                             onClick={() =>
                                                 setDeleteId(studio._id)
                                             }
-                                            className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-red-200 px-3 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50"
+                                            className="flex flex-1 items-center justify-center gap-2 rounded-lg border border-red-200 px-3 py-2.5 text-sm font-semibold text-red-600 transition hover:bg-red-50 dark:border-red-500/30 dark:text-red-400 dark:hover:bg-red-500/10"
                                         >
                                             <Trash2 size={16} />
                                             Delete
@@ -302,28 +310,29 @@ export default function MyListingsPage() {
             </div>
 
             {/* Delete confirmation modal */}
+
             {deleteId && (
                 <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4 backdrop-blur-sm">
-                    <div className="relative w-full max-w-md rounded-2xl bg-white p-7 shadow-2xl">
+                    <div className="relative w-full max-w-md rounded-2xl bg-white p-7 shadow-2xl dark:border dark:border-[#49375F] dark:bg-[#211a30]">
                         <button
                             type="button"
                             onClick={() => setDeleteId(null)}
                             disabled={isDeleting}
                             aria-label="Close confirmation"
-                            className="absolute right-4 top-4 rounded-full p-2 text-gray-400 transition hover:bg-gray-100 hover:text-gray-700"
+                            className="absolute right-4 top-4 rounded-full p-2 text-gray-400 transition hover:bg-gray-100 hover:text-gray-700 dark:hover:bg-[#302441] dark:hover:text-white"
                         >
                             <X size={20} />
                         </button>
 
-                        <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-red-50">
-                            <Trash2 size={26} className="text-red-600" />
+                        <div className="mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-full bg-red-50 dark:bg-red-500/10">
+                            <Trash2 size={26} className="text-red-600 dark:text-red-400" />
                         </div>
 
-                        <h2 className="text-center text-2xl font-bold text-[#292044]">
+                        <h2 className="text-center text-2xl font-bold text-[#292044] dark:text-white">
                             Delete Studio?
                         </h2>
 
-                        <p className="mt-3 text-center leading-relaxed text-gray-500">
+                        <p className="mt-3 text-center leading-relaxed text-gray-500 dark:text-gray-400">
                             Are you sure you want to delete this studio?
                             This action cannot be undone.
                         </p>
@@ -333,7 +342,7 @@ export default function MyListingsPage() {
                                 type="button"
                                 onClick={() => setDeleteId(null)}
                                 disabled={isDeleting}
-                                className="flex-1 rounded-xl border border-gray-200 px-4 py-3 font-semibold text-gray-600 transition hover:bg-gray-50 disabled:opacity-50"
+                                className="flex-1 rounded-xl border border-gray-200 px-4 py-3 font-semibold text-gray-600 transition hover:bg-gray-50 disabled:opacity-50 dark:border-[#49375F] dark:text-gray-300 dark:hover:bg-[#302441]"
                             >
                                 Cancel
                             </button>

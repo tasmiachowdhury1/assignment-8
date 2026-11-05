@@ -1,3 +1,4 @@
+
 "use client";
 
 import Image from "next/image";
@@ -77,7 +78,7 @@ function CallsToActions() {
 
             <Link
                 href="/studios"
-                className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#7C3EE8] shadow-lg shadow-purple-300/30 transition hover:-translate-y-0.5 hover:bg-[#F0E8FF] sm:text-base"
+                className="inline-flex items-center gap-2 rounded-full bg-white px-6 py-3 text-sm font-semibold text-[#7C3EE8] shadow-lg shadow-purple-300/30 transition hover:-translate-y-0.5 hover:bg-[#F0E8FF] dark:bg-[#211A30] dark:text-[#C7A5FF] dark:shadow-black/20 dark:hover:bg-[#302341] sm:text-base"
             >
                 Host Your Space
             </Link>
@@ -90,14 +91,16 @@ function SlideContent({ slide }: { slide: Slide }) {
         <div className="relative z-10 flex min-h-[400px] flex-col justify-center py-14 pl-16 pr-6 sm:min-h-[430px] sm:pl-20 sm:pr-12 lg:min-h-[470px] lg:pl-24 lg:pr-16">
             <div className="max-w-[540px]">
                 <div className="relative inline-block">
-                    <h2 className="text-3xl font-extrabold leading-[1.12] tracking-tight text-[#211D35] sm:text-4xl lg:text-[3.25rem]">
+                    <h2 className="text-3xl font-extrabold leading-[1.12] tracking-tight text-[#211D35] dark:text-white sm:text-4xl lg:text-[3.25rem]">
                         <span className="block">{slide.titleTop}</span>
-                        <span className="block text-[#7C3EE8]">{slide.titleBottom}</span>
+                        <span className="block text-[#7C3EE8] dark:text-[#D0B5FF]">
+                            {slide.titleBottom}
+                        </span>
                     </h2>
                     <AccentMarks />
                 </div>
 
-                <p className="mt-4 max-w-[440px] text-base font-medium leading-6 text-[#454063] sm:text-lg">
+                <p className="mt-4 max-w-[440px] text-base font-medium leading-6 text-[#454063] dark:text-[#E2D8F5] sm:text-lg">
                     {slide.subtitle}
                 </p>
 
@@ -119,13 +122,15 @@ function SlideBody({ slide, priority = false }: { slide: Slide; priority?: boole
                 priority={priority}
             />
 
-            <div className="absolute inset-0 bg-[#A48AF2]/15" aria-hidden />
+            <div className="absolute inset-0 bg-[#A48AF2]/15 dark:bg-[#171020]/35" aria-hidden />
+
             <div
-                className="absolute inset-0 bg-gradient-to-b from-[#A48AF2] via-[#A48AF2]/92 to-[#A48AF2]/60 lg:hidden"
+                className="absolute inset-0 bg-gradient-to-b from-[#A48AF2] via-[#A48AF2]/92 to-[#A48AF2]/60 dark:from-[#21152F]/95 dark:via-[#291B3D]/90 dark:to-[#291B3D]/65 lg:hidden"
                 aria-hidden
             />
+
             <div
-                className="absolute inset-0 hidden bg-gradient-to-r from-[#A48AF2]/95 from-10% via-[#A48AF2]/78 via-45% to-[#A48AF2]/10 to-90% lg:block"
+                className="absolute inset-0 hidden bg-gradient-to-r from-[#A48AF2]/95 from-10% via-[#A48AF2]/78 via-45% to-[#A48AF2]/10 to-90% dark:from-[#21152F]/95 dark:via-[#291B3D]/85 dark:to-[#291B3D]/10 lg:block"
                 aria-hidden
             />
 
@@ -135,10 +140,6 @@ function SlideBody({ slide, priority = false }: { slide: Slide; priority?: boole
 }
 
 export default function Hero() {
-    // Swiper constructs its instance during render, which would run
-    // `new Date()` during the prerender pass and break `next build`.
-    // Mount the slider only on the client and ship a static first
-    // slide as the server-rendered fallback.
     const [mounted, setMounted] = useState(false);
 
     useEffect(() => {
@@ -146,9 +147,9 @@ export default function Hero() {
     }, []);
 
     return (
-        <section className="relative w-full overflow-hidden bg-gradient-to-b from-[#E9DDFC] via-[#F3EDFD] to-[#F6F2FD]">
+        <section className="relative w-full overflow-hidden bg-gradient-to-b from-[#E9DDFC] via-[#F3EDFD] to-[#F6F2FD] transition-colors duration-300 dark:from-[#15111F] dark:via-[#1B1428] dark:to-[#15111F]">
             <div className="mx-auto max-w-[1440px] px-4 py-10 sm:px-6 lg:px-10 lg:py-16">
-                <div className="relative overflow-hidden rounded-[24px] shadow-[0_25px_50px_-15px_rgba(76,29,149,0.4)] lg:rounded-[28px]">
+                <div className="relative overflow-hidden rounded-[24px] shadow-[0_25px_50px_-15px_rgba(76,29,149,0.4)] dark:shadow-[0_25px_50px_-15px_rgba(0,0,0,0.65)] lg:rounded-[28px]">
                     {mounted ? (
                         <Swiper
                             modules={[A11y, Autoplay, Keyboard, Navigation, Pagination]}
@@ -181,7 +182,7 @@ export default function Hero() {
                     <button
                         type="button"
                         aria-label="Previous slide"
-                        className="hero-arrow-prev absolute left-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#8F51EA] shadow-lg shadow-purple-300/40 transition hover:bg-[#F0E8FF] sm:left-4 sm:h-10 sm:w-10 lg:left-5 lg:h-12 lg:w-12"
+                        className="hero-arrow-prev absolute left-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#8F51EA] shadow-lg shadow-purple-300/40 transition hover:bg-[#F0E8FF] dark:bg-[#211A30] dark:text-[#D0B5FF] dark:shadow-black/30 dark:hover:bg-[#38294C] sm:left-4 sm:h-10 sm:w-10 lg:left-5 lg:h-12 lg:w-12"
                     >
                         <ChevronLeft className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden />
                     </button>
@@ -189,7 +190,7 @@ export default function Hero() {
                     <button
                         type="button"
                         aria-label="Next slide"
-                        className="hero-arrow-next absolute right-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#8F51EA] shadow-lg shadow-purple-300/40 transition hover:bg-[#F0E8FF] sm:right-4 sm:h-10 sm:w-10 lg:right-5 lg:h-12 lg:w-12"
+                        className="hero-arrow-next absolute right-3 top-1/2 z-20 flex h-9 w-9 -translate-y-1/2 items-center justify-center rounded-full bg-white text-[#8F51EA] shadow-lg shadow-purple-300/40 transition hover:bg-[#F0E8FF] dark:bg-[#211A30] dark:text-[#D0B5FF] dark:shadow-black/30 dark:hover:bg-[#38294C] sm:right-4 sm:h-10 sm:w-10 lg:right-5 lg:h-12 lg:w-12"
                     >
                         <ChevronRight className="h-5 w-5 sm:h-6 sm:w-6" aria-hidden />
                     </button>

@@ -55,10 +55,10 @@ export default function StudioCard({ studio }: StudioCardProps) {
         typeof studio.reviews === "number" && Number.isFinite(studio.reviews);
 
     return (
-        <article className="group flex flex-col rounded-[22px] bg-white p-3 shadow-[0_18px_45px_-28px_rgba(76,29,149,0.5)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_26px_55px_-24px_rgba(76,29,149,0.55)]">
-            <div className="relative aspect-[16/10] overflow-hidden rounded-[16px] bg-gradient-to-br from-[#EDE5FD] to-[#DCD0F7]">
+        <article className="group flex flex-col rounded-[22px] bg-white p-3 shadow-[0_18px_45px_-28px_rgba(76,29,149,0.5)] transition duration-300 hover:-translate-y-1.5 hover:shadow-[0_26px_55px_-24px_rgba(76,29,149,0.55)] dark:border dark:border-[#49375F] dark:bg-[#211A30] dark:shadow-[0_18px_45px_-28px_rgba(0,0,0,0.7)] dark:hover:shadow-[0_26px_55px_-24px_rgba(0,0,0,0.8)]">
+            <div className="relative aspect-[16/10] overflow-hidden rounded-[16px] bg-gradient-to-br from-[#EDE5FD] to-[#DCD0F7] dark:from-[#35254B] dark:to-[#241832]">
                 {imageFailed ? (
-                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#C4B0F5] to-[#8F51EA]">
+                    <div className="flex h-full w-full items-center justify-center bg-gradient-to-br from-[#C4B0F5] to-[#8F51EA] dark:from-[#6941A5] dark:to-[#35204F]">
                         <CategoryIcon
                             category={studio.category}
                             className="h-12 w-12 text-white/80"
@@ -92,12 +92,12 @@ export default function StudioCard({ studio }: StudioCardProps) {
                             : `Add ${studio.title} to favorites`
                     }
                     onClick={() => setSaved((prev) => !prev)}
-                    className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-[#9A93AE] shadow-lg transition hover:text-[#EC4899]"
+                    className="absolute right-3 top-3 flex h-9 w-9 items-center justify-center rounded-full bg-white/95 text-[#9A93AE] shadow-lg transition hover:text-[#EC4899] dark:bg-[#211A30]/95 dark:text-gray-400 dark:hover:text-pink-400"
                 >
                     <Heart
                         className={`h-4.5 w-4.5 transition ${saved
-                            ? "fill-[#EC4899] text-[#EC4899]"
-                            : "fill-transparent"
+                                ? "fill-[#EC4899] text-[#EC4899]"
+                                : "fill-transparent"
                             }`}
                         aria-hidden
                     />
@@ -105,35 +105,35 @@ export default function StudioCard({ studio }: StudioCardProps) {
             </div>
 
             <div className="flex flex-1 flex-col px-2 pb-1 pt-4">
-                <h3 className="text-xl font-bold tracking-tight text-[#211D35]">
+                <h3 className="text-xl font-bold tracking-tight text-[#211D35] dark:text-white">
                     {studio.title}
                 </h3>
 
                 <div className="mt-2 flex flex-wrap items-center justify-between gap-x-3 gap-y-1">
-                    <span className="flex items-center gap-1.5 text-sm font-bold text-[#3B3556]">
+                    <span className="flex items-center gap-1.5 text-sm font-bold text-[#3B3556] dark:text-gray-200">
                         <Star
                             className="h-4 w-4 fill-amber-400 text-amber-400"
                             aria-hidden
                         />
                         {Number(studio.rating).toFixed(1)}
                         {hasReviews && (
-                            <span className="font-medium text-[#8A8499]">
+                            <span className="font-medium text-[#8A8499] dark:text-gray-400">
                                 ({studio.reviews} reviews)
                             </span>
                         )}
                     </span>
 
-                    <span className="text-lg font-extrabold text-[#7C3AED]">
+                    <span className="text-lg font-extrabold text-[#7C3AED] dark:text-purple-400">
                         ${studio.pricePerHour}{" "}
-                        <span className="text-sm font-semibold text-[#8A8499]">
+                        <span className="text-sm font-semibold text-[#8A8499] dark:text-gray-400">
                             / hr
                         </span>
                     </span>
                 </div>
 
-                <p className="mt-2 flex items-start gap-1.5 text-sm text-[#77718B]">
+                <p className="mt-2 flex items-start gap-1.5 text-sm text-[#77718B] dark:text-gray-400">
                     <MapPin
-                        className="mt-0.5 h-4 w-4 shrink-0 text-[#8F51EA]"
+                        className="mt-0.5 h-4 w-4 shrink-0 text-[#8F51EA] dark:text-purple-400"
                         aria-hidden
                     />
                     {studio.location}

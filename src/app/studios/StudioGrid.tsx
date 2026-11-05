@@ -55,13 +55,14 @@ function matchesCategory(studio: Studio, slug: string) {
 
 function CardSkeleton() {
     return (
-        <div className="rounded-[22px] bg-white p-3 shadow-[0_18px_45px_-28px_rgba(76,29,149,0.4)]">
-            <div className="aspect-[16/10] animate-pulse rounded-[16px] bg-[#EDE7FB]" />
+        <div className="rounded-[22px] border border-transparent bg-white p-3 shadow-[0_18px_45px_-28px_rgba(76,29,149,0.4)] dark:border-[#49375F] dark:bg-[#211A30] dark:shadow-[0_18px_45px_-28px_rgba(0,0,0,0.8)]">
+            <div className="aspect-[16/10] animate-pulse rounded-[16px] bg-[#EDE7FB] dark:bg-[#352747]" />
+
             <div className="space-y-3 px-2 pb-2 pt-4">
-                <div className="h-5 w-2/3 animate-pulse rounded-md bg-[#EDE7FB]" />
-                <div className="h-4 w-1/2 animate-pulse rounded-md bg-[#F3EEFD]" />
-                <div className="h-4 w-3/4 animate-pulse rounded-md bg-[#F3EEFD]" />
-                <div className="h-10 w-full animate-pulse rounded-xl bg-[#EDE7FB]" />
+                <div className="h-5 w-2/3 animate-pulse rounded-md bg-[#EDE7FB] dark:bg-[#352747]" />
+                <div className="h-4 w-1/2 animate-pulse rounded-md bg-[#F3EEFD] dark:bg-[#30243F]" />
+                <div className="h-4 w-3/4 animate-pulse rounded-md bg-[#F3EEFD] dark:bg-[#30243F]" />
+                <div className="h-10 w-full animate-pulse rounded-xl bg-[#EDE7FB] dark:bg-[#352747]" />
             </div>
         </div>
     );
@@ -93,14 +94,18 @@ function StatusCard({
     action?: ReactNode;
 }) {
     return (
-        <div className="mx-auto flex max-w-xl flex-col items-center rounded-[22px] bg-white px-6 py-12 text-center shadow-[0_18px_45px_-28px_rgba(76,29,149,0.5)]">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#F0E7FE] text-[#8F51EA]">
+        <div className="mx-auto flex max-w-xl flex-col items-center rounded-[22px] border border-transparent bg-white px-6 py-12 text-center shadow-[0_18px_45px_-28px_rgba(76,29,149,0.5)] transition-colors duration-300 dark:border-[#49375F] dark:bg-[#211A30] dark:shadow-[0_18px_45px_-28px_rgba(0,0,0,0.8)]">
+            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-[#F0E7FE] text-[#8F51EA] dark:bg-[#352747] dark:text-[#B995F8]">
                 {icon}
             </div>
 
-            <h2 className="mt-4 text-xl font-bold text-[#211D35]">{title}</h2>
+            <h2 className="mt-4 text-xl font-bold text-[#211D35] dark:text-white">
+                {title}
+            </h2>
 
-            <p className="mt-2 text-sm leading-6 text-[#77718B]">{description}</p>
+            <p className="mt-2 text-sm leading-6 text-[#77718B] dark:text-gray-400">
+                {description}
+            </p>
 
             {action && <div className="mt-5">{action}</div>}
         </div>
@@ -115,9 +120,11 @@ export default async function StudioGrid({
     searchParams: SearchParams;
 }) {
     const params = await searchParams;
+
     const rawCategory = Array.isArray(params.category)
         ? params.category[0]
         : params.category;
+
     const category = rawCategory?.trim() || undefined;
 
     let studios: Studio[];
@@ -144,7 +151,7 @@ export default async function StudioGrid({
                 action={
                     <Link
                         href="/studios"
-                        className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] px-6 py-2.5 text-sm font-semibold text-white shadow-md transition hover:brightness-105"
+                        className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] px-6 py-2.5 text-sm font-semibold text-white shadow-md transition hover:brightness-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8B5CF6]"
                     >
                         Try again
                     </Link>
@@ -153,7 +160,10 @@ export default async function StudioGrid({
         );
     }
 
-    const activeCategory = category ? CATEGORY_GROUPS[category] : undefined;
+    const activeCategory = category
+        ? CATEGORY_GROUPS[category]
+        : undefined;
+
     const visibleStudios = category
         ? studios.filter((studio) => matchesCategory(studio, category))
         : studios;
@@ -161,7 +171,9 @@ export default async function StudioGrid({
     if (visibleStudios.length === 0) {
         return (
             <div className="space-y-6">
-                {activeCategory && <CategoryNotice label={activeCategory.label} count={0} />}
+                {activeCategory && (
+                    <CategoryNotice label={activeCategory.label} count={0} />
+                )}
 
                 <StatusCard
                     icon={<LayoutGrid className="h-6 w-6" aria-hidden />}
@@ -174,7 +186,7 @@ export default async function StudioGrid({
                     action={
                         <Link
                             href="/studios"
-                            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] px-6 py-2.5 text-sm font-semibold text-white shadow-md transition hover:brightness-105"
+                            className="inline-flex items-center gap-2 rounded-full bg-gradient-to-r from-[#8B5CF6] to-[#EC4899] px-6 py-2.5 text-sm font-semibold text-white shadow-md transition hover:brightness-105 focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8B5CF6]"
                         >
                             Browse all studios
                         </Link>
@@ -202,12 +214,18 @@ export default async function StudioGrid({
     );
 }
 
-function CategoryNotice({ label, count }: { label: string; count: number }) {
+function CategoryNotice({
+    label,
+    count,
+}: {
+    label: string;
+    count: number;
+}) {
     return (
-        <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-[#77718B]">
+        <div className="flex flex-wrap items-center justify-center gap-3 text-sm text-[#77718B] dark:text-gray-400">
             <span>
                 Showing{" "}
-                <strong className="font-bold text-[#211D35]">
+                <strong className="font-bold text-[#211D35] dark:text-white">
                     {count > 0 ? count : "no"}
                 </strong>{" "}
                 {label}
@@ -215,7 +233,7 @@ function CategoryNotice({ label, count }: { label: string; count: number }) {
 
             <Link
                 href="/studios"
-                className="rounded-full bg-white px-4 py-1.5 text-xs font-semibold text-[#8F51EA] shadow-sm transition hover:bg-[#F0E7FE]"
+                className="rounded-full bg-white px-4 py-1.5 text-xs font-semibold text-[#8F51EA] shadow-sm transition hover:bg-[#F0E7FE] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#8B5CF6] dark:border dark:border-[#49375F] dark:bg-[#211A30] dark:text-[#B995F8] dark:hover:bg-[#352747]"
             >
                 Show all studios
             </Link>

@@ -48,7 +48,7 @@ export default function SortBySelect({ value }: { value: string }) {
 
     return (
         <div className="flex items-center gap-3">
-            <span className="text-sm font-semibold text-[#211D35]">
+            <span className="text-sm font-semibold text-[#211D35] dark:text-gray-200">
                 Sort By:
             </span>
 
@@ -59,12 +59,15 @@ export default function SortBySelect({ value }: { value: string }) {
             >
                 <SelectTrigger
                     aria-label="Sort studios by category"
-                    className="h-11 min-w-[210px] cursor-pointer rounded-xl border-[#D8CCF2] bg-white px-4 text-sm font-semibold text-[#211D35] shadow-sm transition hover:border-[#8F51EA] focus-visible:ring-[#8F51EA]/30"
+                    className="h-11 min-w-[210px] cursor-pointer rounded-xl border-[#D8CCF2] bg-white px-4 text-sm font-semibold text-[#211D35] shadow-sm transition hover:border-[#8F51EA] focus-visible:ring-[#8F51EA]/30 dark:border-[#49375F] dark:bg-[#211A30] dark:text-gray-200 dark:hover:border-purple-400 dark:focus-visible:ring-purple-400/30"
                 >
                     <SelectValue />
                 </SelectTrigger>
 
-                <SelectContent align="start" className="rounded-xl p-1.5">
+                <SelectContent
+                    align="start"
+                    className="rounded-xl border-[#E9DFF8] bg-white p-1.5 dark:border-[#49375F] dark:bg-[#211A30]"
+                >
                     {OPTIONS.map((option) => {
                         const Icon = option.icon;
 
@@ -72,10 +75,10 @@ export default function SortBySelect({ value }: { value: string }) {
                             <SelectItem
                                 key={option.value}
                                 value={option.value}
-                                className="cursor-pointer rounded-lg py-2.5 pl-3 pr-9 text-sm font-medium"
+                                className="cursor-pointer rounded-lg py-2.5 pl-3 pr-9 text-sm font-medium text-[#211D35] focus:bg-[#F0E7FE] focus:text-[#7C3AED] dark:text-gray-200 dark:focus:bg-[#352747] dark:focus:text-purple-300"
                             >
                                 <Icon
-                                    className="text-[#8F51EA]"
+                                    className="text-[#8F51EA] dark:text-purple-400"
                                     aria-hidden
                                 />
                                 {option.label}

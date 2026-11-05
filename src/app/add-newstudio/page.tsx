@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -120,24 +119,26 @@ export default function AddStudio() {
 
     if (isPending) {
         return (
-            <div className="flex min-h-screen items-center justify-center bg-[#F7F4FF]">
-                <Loader2 className="h-9 w-9 animate-spin text-purple-600" />
+            <div className="flex min-h-screen items-center justify-center bg-[#F7F4FF] dark:bg-[#15111f]">
+                <Loader2 className="h-9 w-9 animate-spin text-purple-600 dark:text-[#a875f5]" />
             </div>
         );
     }
 
     if (!session) {
         return (
-            <div className="flex min-h-screen flex-col items-center justify-center bg-[#F7F4FF] px-4 text-center">
-                <h2 className="text-2xl font-bold text-[#292044]">
+            <div className="flex min-h-screen flex-col items-center justify-center bg-[#F7F4FF] px-4 text-center dark:bg-[#15111f]">
+                <h2 className="text-2xl font-bold text-[#292044] dark:text-white">
                     Please Sign In
                 </h2>
-                <p className="mt-2 text-gray-500">
+
+                <p className="mt-2 text-gray-500 dark:text-[#b7a9cc]">
                     You need to sign in before adding a studio.
                 </p>
+
                 <button
                     onClick={() => router.push("/login")}
-                    className="mt-5 rounded-lg bg-purple-600 px-6 py-3 font-semibold text-white"
+                    className="mt-5 rounded-lg bg-purple-600 px-6 py-3 font-semibold text-white transition hover:bg-purple-700"
                 >
                     Sign In
                 </button>
@@ -146,23 +147,42 @@ export default function AddStudio() {
     }
 
     return (
-        <section className="min-h-screen bg-[#F7F4FF] px-4 py-12">
-            <div className="mx-auto max-w-2xl rounded-2xl border border-purple-100 bg-white p-6 shadow-lg sm:p-10">
+        <section className="relative min-h-screen overflow-hidden bg-[#F7F4FF] px-4 py-12 transition-colors duration-300 dark:bg-[#15111f]">
+
+            {/* Decorative background blobs */}
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -top-32 -right-24 h-[380px] w-[420px] rounded-full bg-purple-300/30 blur-3xl dark:bg-purple-700/15"
+            />
+
+            <div
+                aria-hidden="true"
+                className="pointer-events-none absolute -bottom-32 -left-24 h-[380px] w-[420px] rounded-full bg-pink-300/30 blur-3xl dark:bg-fuchsia-700/10"
+            />
+
+            <div className="relative z-10 mx-auto max-w-2xl rounded-2xl border border-purple-100 bg-white p-6 shadow-lg transition-colors duration-300 dark:border-[#49375F] dark:bg-[#211a30] sm:p-10">
+
                 <div className="mb-8 text-center">
-                    <h1 className="text-3xl font-bold text-[#292044]">
+                    <h1 className="text-3xl font-bold text-[#292044] dark:text-white">
                         Add Your Studio
                     </h1>
 
-                    <p className="mt-2 text-sm text-gray-500">
+                    <p className="mt-2 text-sm text-gray-500 dark:text-[#b7a9cc]">
                         Share your creative space with others.
                     </p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-5">
+
+                    {/* Studio Name */}
                     <div>
-                        <label htmlFor="title" className="mb-2 block text-sm font-semibold text-[#292044]">
+                        <label
+                            htmlFor="title"
+                            className="mb-2 block text-sm font-semibold text-[#292044] dark:text-[#e5d9f5]"
+                        >
                             Studio Name
                         </label>
+
                         <input
                             id="title"
                             type="text"
@@ -171,14 +191,19 @@ export default function AddStudio() {
                             onChange={handleChange}
                             placeholder="Enter studio name"
                             required
-                            className="w-full rounded-lg border border-purple-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                            className="w-full rounded-lg border border-purple-200 bg-white px-4 py-3 text-[#292044] outline-none transition placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-100 dark:border-[#49375F] dark:bg-[#30243f] dark:text-white dark:placeholder:text-[#9585aa] dark:focus:border-[#a875f5] dark:focus:ring-[#a875f5]/20"
                         />
                     </div>
 
+                    {/* Studio Image URL */}
                     <div>
-                        <label htmlFor="imageUrl" className="mb-2 block text-sm font-semibold text-[#292044]">
+                        <label
+                            htmlFor="imageUrl"
+                            className="mb-2 block text-sm font-semibold text-[#292044] dark:text-[#e5d9f5]"
+                        >
                             Studio Image URL
                         </label>
+
                         <input
                             id="imageUrl"
                             type="url"
@@ -187,35 +212,50 @@ export default function AddStudio() {
                             onChange={handleChange}
                             placeholder="https://example.com/image.jpg"
                             required
-                            className="w-full rounded-lg border border-purple-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                            className="w-full rounded-lg border border-purple-200 bg-white px-4 py-3 text-[#292044] outline-none transition placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-100 dark:border-[#49375F] dark:bg-[#30243f] dark:text-white dark:placeholder:text-[#9585aa] dark:focus:border-[#a875f5] dark:focus:ring-[#a875f5]/20"
                         />
                     </div>
 
+                    {/* Category */}
                     <div>
-                        <label htmlFor="category" className="mb-2 block text-sm font-semibold text-[#292044]">
+                        <label
+                            htmlFor="category"
+                            className="mb-2 block text-sm font-semibold text-[#292044] dark:text-[#e5d9f5]"
+                        >
                             Category
                         </label>
+
                         <select
                             id="category"
                             name="category"
                             value={formData.category}
                             onChange={handleChange}
                             required
-                            className="w-full rounded-lg border border-purple-200 bg-white px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                            className="w-full rounded-lg border border-purple-200 bg-white px-4 py-3 text-[#292044] outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100 dark:border-[#49375F] dark:bg-[#30243f] dark:text-white dark:focus:border-[#a875f5] dark:focus:ring-[#a875f5]/20"
                         >
                             <option value="">Select a category</option>
+
                             {categories.map((category) => (
-                                <option key={category} value={category}>
+                                <option
+                                    key={category}
+                                    value={category}
+                                    className="bg-white text-[#292044] dark:bg-[#30243f] dark:text-white"
+                                >
                                     {category}
                                 </option>
                             ))}
                         </select>
                     </div>
 
+                    {/* Price Per Hour */}
                     <div>
-                        <label htmlFor="pricePerHour" className="mb-2 block text-sm font-semibold text-[#292044]">
+                        <label
+                            htmlFor="pricePerHour"
+                            className="mb-2 block text-sm font-semibold text-[#292044] dark:text-[#e5d9f5]"
+                        >
                             Price Per Hour ($)
                         </label>
+
                         <input
                             id="pricePerHour"
                             type="number"
@@ -225,14 +265,19 @@ export default function AddStudio() {
                             placeholder="Enter hourly price"
                             min="1"
                             required
-                            className="w-full rounded-lg border border-purple-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                            className="w-full rounded-lg border border-purple-200 bg-white px-4 py-3 text-[#292044] outline-none transition placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-100 dark:border-[#49375F] dark:bg-[#30243f] dark:text-white dark:placeholder:text-[#9585aa] dark:focus:border-[#a875f5] dark:focus:ring-[#a875f5]/20"
                         />
                     </div>
 
+                    {/* Rating */}
                     <div>
-                        <label htmlFor="rating" className="mb-2 block text-sm font-semibold text-[#292044]">
+                        <label
+                            htmlFor="rating"
+                            className="mb-2 block text-sm font-semibold text-[#292044] dark:text-[#e5d9f5]"
+                        >
                             Studio Rating (0–5)
                         </label>
+
                         <input
                             id="rating"
                             type="number"
@@ -244,17 +289,23 @@ export default function AddStudio() {
                             max="5"
                             step="0.1"
                             required
-                            className="w-full rounded-lg border border-purple-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                            className="w-full rounded-lg border border-purple-200 bg-white px-4 py-3 text-[#292044] outline-none transition placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-100 dark:border-[#49375F] dark:bg-[#30243f] dark:text-white dark:placeholder:text-[#9585aa] dark:focus:border-[#a875f5] dark:focus:ring-[#a875f5]/20"
                         />
-                        <p className="mt-1 text-xs text-gray-500">
+
+                        <p className="mt-1 text-xs text-gray-500 dark:text-[#a99bbd]">
                             Enter a rating between 0 and 5.
                         </p>
                     </div>
 
+                    {/* Location */}
                     <div>
-                        <label htmlFor="location" className="mb-2 block text-sm font-semibold text-[#292044]">
+                        <label
+                            htmlFor="location"
+                            className="mb-2 block text-sm font-semibold text-[#292044] dark:text-[#e5d9f5]"
+                        >
                             Location
                         </label>
+
                         <input
                             id="location"
                             type="text"
@@ -263,10 +314,11 @@ export default function AddStudio() {
                             onChange={handleChange}
                             placeholder="Enter studio location"
                             required
-                            className="w-full rounded-lg border border-purple-200 px-4 py-3 outline-none transition focus:border-purple-500 focus:ring-2 focus:ring-purple-100"
+                            className="w-full rounded-lg border border-purple-200 bg-white px-4 py-3 text-[#292044] outline-none transition placeholder:text-gray-400 focus:border-purple-500 focus:ring-2 focus:ring-purple-100 dark:border-[#49375F] dark:bg-[#30243f] dark:text-white dark:placeholder:text-[#9585aa] dark:focus:border-[#a875f5] dark:focus:ring-[#a875f5]/20"
                         />
                     </div>
 
+                    {/* Submit Button */}
                     <button
                         type="submit"
                         disabled={isSubmitting}
@@ -274,7 +326,10 @@ export default function AddStudio() {
                     >
                         {isSubmitting ? (
                             <>
-                                <Loader2 size={19} className="animate-spin" />
+                                <Loader2
+                                    size={19}
+                                    className="animate-spin"
+                                />
                                 Adding Studio...
                             </>
                         ) : (

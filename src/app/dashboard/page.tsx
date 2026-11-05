@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useRef, useState, useSyncExternalStore } from "react";
@@ -37,7 +36,6 @@ type Profile = {
     image: string;
 };
 
-// Shown until a signed-in user's details are loaded.
 const FALLBACK_PROFILE: Profile = {
     name: "Sarah Ahmed",
     email: "sarah.ahmed@example.com",
@@ -45,9 +43,8 @@ const FALLBACK_PROFILE: Profile = {
     image: "",
 };
 
-// Better Auth has no phone field, so it is kept on this device.
 const phoneStorageKey = (userId: string) =>
-    `studiospace:phone:${userId}`;
+    "studiospace:phone:" + userId;
 
 const getStoredPhone = (userId: string) => {
     if (typeof window === "undefined") return null;
@@ -55,7 +52,6 @@ const getStoredPhone = (userId: string) => {
     try {
         return window.localStorage.getItem(phoneStorageKey(userId));
     } catch {
-        // Storage can be unavailable (e.g. private browsing).
         return null;
     }
 };
@@ -64,7 +60,7 @@ const storePhone = (userId: string, phone: string) => {
     try {
         window.localStorage.setItem(phoneStorageKey(userId), phone);
     } catch {
-        // Ignore storage failures — the number still shows for this visit.
+        // Ignore storage failures.
     }
 };
 
@@ -73,7 +69,6 @@ const subscribePhone = (onChange: () => void) => {
     return () => window.removeEventListener("storage", onChange);
 };
 
-// Subscribes to the saved phone number so it can be read during render.
 const useStoredPhone = (userId?: string) =>
     useSyncExternalStore(
         subscribePhone,
@@ -81,7 +76,6 @@ const useStoredPhone = (userId?: string) =>
         () => null
     );
 
-// Downscale picked photos so they stay small enough to store as a data URL.
 const readImageFile = (file: File): Promise<string> => {
     return new Promise((resolve, reject) => {
         const reader = new FileReader();
@@ -135,7 +129,6 @@ export default function DashboardPage() {
     const { data: session, isPending } = authClient.useSession();
     const sessionUser = session?.user;
 
-    // Locally edited values, layered on top of the signed-in user.
     const [edits, setEdits] = useState<Partial<Profile>>({});
     const [editOpen, setEditOpen] = useState(false);
     const [form, setForm] = useState({ name: "", phone: "" });
@@ -168,7 +161,6 @@ export default function DashboardPage() {
     const handlePhotoChange = async (e: ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
 
-        // Reset so the same file can be picked again later.
         e.target.value = "";
 
         if (!file) return;
@@ -196,7 +188,6 @@ export default function DashboardPage() {
 
             setEdits((prev) => ({ ...prev, image }));
             toast.success("Profile photo updated!");
-
         } catch (error) {
             toast.error(
                 error instanceof Error
@@ -245,7 +236,6 @@ export default function DashboardPage() {
             setEdits((prev) => ({ ...prev, name, phone }));
             setEditOpen(false);
             toast.success("Profile updated successfully!");
-
         } catch {
             toast.error("Something went wrong. Please try again.");
         } finally {
@@ -257,75 +247,76 @@ export default function DashboardPage() {
         profile.name.trim().charAt(0).toUpperCase() || "U";
 
     return (
-        <section className="relative min-h-[75vh] overflow-hidden bg-gradient-to-br from-[#F4EEFF] via-[#FBF3FF] to-[#FDEFF8] px-4 py-12 sm:px-8 sm:py-16 lg:px-12">
+        <section className="relative min-h-[75vh] overflow-hidden bg-gradient-to-br from-[#F4EEFF] via-[#FBF3FF] to-[#FDEFF8] px-4 py-12 transition-colors duration-300 dark:from-[#15111f] dark:via-[#1c1528] dark:to-[#211a30] sm:px-8 sm:py-16 lg:px-12">
 
             {/* Decorative background blobs */}
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute -top-36 -right-24 h-[420px] w-[540px] rounded-[50%] bg-purple-300/50"
+                className="pointer-events-none absolute -top-36 -right-24 h-[420px] w-[540px] rounded-[50%] bg-purple-300/50 dark:bg-purple-700/15"
             />
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute top-44 -right-40 h-[340px] w-[440px] rounded-[50%] bg-pink-300/40"
+                className="pointer-events-none absolute top-44 -right-40 h-[340px] w-[440px] rounded-[50%] bg-pink-300/40 dark:bg-fuchsia-700/10"
             />
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute -bottom-44 -left-32 h-[440px] w-[500px] rounded-[50%] bg-purple-300/40"
+                className="pointer-events-none absolute -bottom-44 -left-32 h-[440px] w-[500px] rounded-[50%] bg-purple-300/40 dark:bg-purple-700/15"
             />
             <div
                 aria-hidden="true"
-                className="pointer-events-none absolute -bottom-36 right-12 h-[320px] w-[400px] rounded-[50%] bg-fuchsia-200/50"
+                className="pointer-events-none absolute -bottom-36 right-12 h-[320px] w-[400px] rounded-[50%] bg-fuchsia-200/50 dark:bg-fuchsia-700/10"
             />
 
             <div className="relative z-10 mx-auto max-w-5xl">
 
                 {/* Page Heading */}
                 <header className="mb-8 sm:mb-10">
-                    <h1 className="text-4xl font-extrabold tracking-tight text-[#1B1533] sm:text-5xl">
+                    <h1 className="text-4xl font-extrabold tracking-tight text-[#1B1533] dark:text-white sm:text-5xl">
                         My Profile
                     </h1>
 
-                    <p className="mt-3 text-sm text-[#77718B] sm:text-base">
+                    <p className="mt-3 text-sm text-[#77718B] dark:text-[#b7a9cc] sm:text-base">
                         View and manage your profile information
                     </p>
                 </header>
 
                 {isPending ? (
                     /* Loading Skeleton */
-                    <div className="animate-pulse rounded-[28px] border border-white/80 bg-white/95 p-6 shadow-[0_30px_60px_-25px_rgba(143,81,234,0.45)] sm:p-10">
+                    <div className="animate-pulse rounded-[28px] border border-white/80 bg-white/95 p-6 shadow-[0_30px_60px_-25px_rgba(143,81,234,0.45)] dark:border-[#49375F] dark:bg-[#211a30] sm:p-10">
                         <div className="grid gap-8 md:grid-cols-[300px_1fr] md:items-center md:gap-10">
                             <div className="flex justify-center md:justify-start">
-                                <div className="h-44 w-44 rounded-full bg-purple-100 sm:h-52 sm:w-52" />
+                                <div className="h-44 w-44 rounded-full bg-purple-100 dark:bg-[#38294b] sm:h-52 sm:w-52" />
                             </div>
 
-                            <div className="space-y-5 md:border-l md:border-purple-100 md:pl-10">
-                                <div className="h-9 w-56 rounded-lg bg-purple-100" />
-                                <div className="h-5 w-72 max-w-full rounded-lg bg-purple-50" />
-                                <div className="h-5 w-48 max-w-full rounded-lg bg-purple-50" />
-                                <div className="h-12 w-48 rounded-full bg-purple-100" />
+                            <div className="space-y-5 md:border-l md:border-purple-100 dark:md:border-[#49375F] md:pl-10">
+                                <div className="h-9 w-56 rounded-lg bg-purple-100 dark:bg-[#38294b]" />
+                                <div className="h-5 w-72 max-w-full rounded-lg bg-purple-50 dark:bg-[#30243f]" />
+                                <div className="h-5 w-48 max-w-full rounded-lg bg-purple-50 dark:bg-[#30243f]" />
+                                <div className="h-12 w-48 rounded-full bg-purple-100 dark:bg-[#38294b]" />
                             </div>
                         </div>
                     </div>
                 ) : (
                     /* Profile Card */
-                    <div className="rounded-[28px] border border-white/80 bg-white/95 p-6 shadow-[0_30px_60px_-25px_rgba(143,81,234,0.45)] backdrop-blur-sm sm:p-10">
+                    <div className="rounded-[28px] border border-white/80 bg-white/95 p-6 shadow-[0_30px_60px_-25px_rgba(143,81,234,0.45)] backdrop-blur-sm transition-colors duration-300 dark:border-[#49375F] dark:bg-[#211a30]/95 sm:p-10">
                         <div className="grid gap-8 md:grid-cols-[300px_1fr] md:items-center md:gap-10">
 
                             {/* Avatar */}
                             <div className="flex justify-center md:justify-start">
                                 <div className="relative">
+
                                     {/* Accent strokes */}
                                     <div
                                         aria-hidden="true"
                                         className="absolute -left-5 top-0 z-10 hidden sm:block"
                                     >
-                                        <span className="absolute top-1 h-1.5 w-8 rounded-full bg-[#8F51EA] rotate-[35deg]" />
-                                        <span className="absolute top-6 left-2 h-1.5 w-6 rounded-full bg-[#8F51EA] rotate-[10deg]" />
-                                        <span className="absolute top-11 left-4 h-1.5 w-5 rounded-full bg-[#8F51EA] -rotate-[15deg]" />
+                                        <span className="absolute top-1 h-1.5 w-8 rotate-[35deg] rounded-full bg-[#8F51EA] dark:bg-[#a875f5]" />
+                                        <span className="absolute top-6 left-2 h-1.5 w-6 rotate-[10deg] rounded-full bg-[#8F51EA] dark:bg-[#a875f5]" />
+                                        <span className="absolute top-11 left-4 h-1.5 w-5 -rotate-[15deg] rounded-full bg-[#8F51EA] dark:bg-[#a875f5]" />
                                     </div>
 
-                                    <div className="inline-block rounded-full border-[3px] border-[#A55BF2]/70 bg-white p-2 shadow-[0_18px_40px_-18px_rgba(143,81,234,0.8)]">
-                                        <div className="relative h-44 w-44 overflow-hidden rounded-full bg-gradient-to-br from-[#EFE6FF] to-[#FCE7F3] sm:h-52 sm:w-52">
+                                    <div className="inline-block rounded-full border-[3px] border-[#A55BF2]/70 bg-white p-2 shadow-[0_18px_40px_-18px_rgba(143,81,234,0.8)] dark:border-[#a875f5]/80 dark:bg-[#30243f]">
+                                        <div className="relative h-44 w-44 overflow-hidden rounded-full bg-gradient-to-br from-[#EFE6FF] to-[#FCE7F3] dark:from-[#38294b] dark:to-[#49304d] sm:h-52 sm:w-52">
                                             {profile.image ? (
                                                 <Image
                                                     src={profile.image}
@@ -339,7 +330,7 @@ export default function DashboardPage() {
                                                     className="object-cover"
                                                 />
                                             ) : (
-                                                <span className="absolute inset-0 flex items-center justify-center text-5xl font-extrabold text-[#8F51EA] sm:text-6xl">
+                                                <span className="absolute inset-0 flex items-center justify-center text-5xl font-extrabold text-[#8F51EA] dark:text-[#c4a2ff] sm:text-6xl">
                                                     {initial}
                                                 </span>
                                             )}
@@ -352,7 +343,7 @@ export default function DashboardPage() {
                                         onClick={handlePhotoClick}
                                         disabled={uploading}
                                         aria-label="Change profile photo"
-                                        className="absolute bottom-1 right-1 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#8F51EA] to-[#C46BF0] text-white shadow-lg ring-4 ring-white transition hover:scale-105 disabled:opacity-60"
+                                        className="absolute right-1 bottom-1 flex h-12 w-12 items-center justify-center rounded-full bg-gradient-to-br from-[#8F51EA] to-[#C46BF0] text-white shadow-lg ring-4 ring-white transition hover:scale-105 disabled:opacity-60 dark:ring-[#211a30]"
                                     >
                                         {uploading ? (
                                             <LoaderCircle
@@ -375,18 +366,18 @@ export default function DashboardPage() {
                             </div>
 
                             {/* Details */}
-                            <div className="md:border-l md:border-purple-100 md:pl-10">
+                            <div className="md:border-l md:border-purple-100 dark:md:border-[#49375F] md:pl-10">
                                 <div className="flex flex-col gap-6">
 
                                     {/* Name + Verified badge */}
                                     <div className="flex items-center gap-3">
-                                        <h2 className="text-3xl font-extrabold tracking-tight break-words text-[#1B1533] sm:text-4xl">
+                                        <h2 className="break-words text-3xl font-extrabold tracking-tight text-[#1B1533] dark:text-white sm:text-4xl">
                                             {profile.name}
                                         </h2>
 
                                         <span
                                             title="Verified member"
-                                            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#8F51EA] to-[#B95CF0] text-white shadow-md shadow-purple-200"
+                                            className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-gradient-to-br from-[#8F51EA] to-[#B95CF0] text-white shadow-md shadow-purple-200 dark:shadow-purple-950/40"
                                         >
                                             <Check size={16} strokeWidth={3.5} />
                                         </span>
@@ -395,24 +386,24 @@ export default function DashboardPage() {
                                     {/* Contact Details */}
                                     <ul className="space-y-4">
                                         <li className="flex items-center gap-4">
-                                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#8F51EA] to-[#C46BF0] text-white shadow-md shadow-purple-200">
+                                            <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-gradient-to-br from-[#8F51EA] to-[#C46BF0] text-white shadow-md shadow-purple-200 dark:shadow-purple-950/40">
                                                 <Mail size={19} />
                                             </span>
 
-                                            <span className="min-w-0 text-sm break-all text-[#4D475E] sm:text-base">
+                                            <span className="min-w-0 break-all text-sm text-[#4D475E] dark:text-[#d0c3e2] sm:text-base">
                                                 {profile.email}
                                             </span>
                                         </li>
 
                                         <li className="flex items-center gap-4">
-                                            <span className="flex h-10 w-10 shrink-0 items-center justify-center text-[#8F51EA]">
+                                            <span className="flex h-10 w-10 shrink-0 items-center justify-center text-[#8F51EA] dark:text-[#b995ff]">
                                                 <Phone
                                                     size={22}
                                                     strokeWidth={2.4}
                                                 />
                                             </span>
 
-                                            <span className="min-w-0 text-sm text-[#4D475E] sm:text-base">
+                                            <span className="min-w-0 text-sm text-[#4D475E] dark:text-[#d0c3e2] sm:text-base">
                                                 {profile.phone}
                                             </span>
                                         </li>
@@ -442,13 +433,13 @@ export default function DashboardPage() {
 
             {/* Edit Profile Dialog */}
             <Dialog open={editOpen} onOpenChange={setEditOpen}>
-                <DialogContent className="sm:max-w-md">
+                <DialogContent className="border-purple-100 bg-white dark:border-[#49375F] dark:bg-[#211a30] sm:max-w-md">
                     <DialogHeader>
-                        <DialogTitle className="text-lg font-bold text-[#211D35]">
+                        <DialogTitle className="text-lg font-bold text-[#211D35] dark:text-white">
                             Edit Profile
                         </DialogTitle>
 
-                        <DialogDescription>
+                        <DialogDescription className="text-[#77718B] dark:text-[#b7a9cc]">
                             Update your personal details.
                         </DialogDescription>
                     </DialogHeader>
@@ -461,7 +452,7 @@ export default function DashboardPage() {
                         <div className="space-y-2">
                             <Label
                                 htmlFor="profile-name"
-                                className="text-[#211D35]"
+                                className="text-[#211D35] dark:text-[#e5d9f5]"
                             >
                                 Full Name
                             </Label>
@@ -478,7 +469,7 @@ export default function DashboardPage() {
                                 placeholder="Your full name"
                                 required
                                 autoComplete="name"
-                                className="h-11 rounded-xl border-purple-100 bg-white px-4 text-sm text-[#211D35] placeholder:text-[#A49BB5] focus-visible:ring-[#8F51EA]"
+                                className="h-11 rounded-xl border-purple-100 bg-white px-4 text-sm text-[#211D35] placeholder:text-[#A49BB5] focus-visible:ring-[#8F51EA] dark:border-[#49375F] dark:bg-[#30243f] dark:text-white dark:placeholder:text-[#9585aa] dark:focus-visible:ring-[#a875f5]"
                             />
                         </div>
 
@@ -486,7 +477,7 @@ export default function DashboardPage() {
                         <div className="space-y-2">
                             <Label
                                 htmlFor="profile-email"
-                                className="text-[#211D35]"
+                                className="text-[#211D35] dark:text-[#e5d9f5]"
                             >
                                 Email
                             </Label>
@@ -495,10 +486,10 @@ export default function DashboardPage() {
                                 id="profile-email"
                                 value={profile.email}
                                 disabled
-                                className="h-11 rounded-xl border-purple-100 bg-purple-50/60 px-4 text-sm text-[#77718B]"
+                                className="h-11 rounded-xl border-purple-100 bg-purple-50/60 px-4 text-sm text-[#77718B] disabled:opacity-100 dark:border-[#49375F] dark:bg-[#30243f] dark:text-[#a99bbd]"
                             />
 
-                            <p className="text-xs text-[#9389A8]">
+                            <p className="text-xs text-[#9389A8] dark:text-[#a99bbd]">
                                 This is your sign-in email and can&apos;t be
                                 changed here.
                             </p>
@@ -508,7 +499,7 @@ export default function DashboardPage() {
                         <div className="space-y-2">
                             <Label
                                 htmlFor="profile-phone"
-                                className="text-[#211D35]"
+                                className="text-[#211D35] dark:text-[#e5d9f5]"
                             >
                                 Phone Number
                             </Label>
@@ -525,7 +516,7 @@ export default function DashboardPage() {
                                 placeholder="+880 1712 345678"
                                 required
                                 autoComplete="tel"
-                                className="h-11 rounded-xl border-purple-100 bg-white px-4 text-sm text-[#211D35] placeholder:text-[#A49BB5] focus-visible:ring-[#8F51EA]"
+                                className="h-11 rounded-xl border-purple-100 bg-white px-4 text-sm text-[#211D35] placeholder:text-[#A49BB5] focus-visible:ring-[#8F51EA] dark:border-[#49375F] dark:bg-[#30243f] dark:text-white dark:placeholder:text-[#9585aa] dark:focus-visible:ring-[#a875f5]"
                             />
                         </div>
 
@@ -535,7 +526,7 @@ export default function DashboardPage() {
                                 variant="outline"
                                 onClick={() => setEditOpen(false)}
                                 disabled={saving}
-                                className="h-11 rounded-xl border-purple-200 bg-white px-5 text-sm font-semibold text-[#4D475E] transition hover:bg-purple-50"
+                                className="h-11 rounded-xl border-purple-200 bg-white px-5 text-sm font-semibold text-[#4D475E] transition hover:bg-purple-50 dark:border-[#59456f] dark:bg-[#30243f] dark:text-[#e5d9f5] dark:hover:bg-[#3b2c4e]"
                             >
                                 Cancel
                             </Button>
@@ -543,7 +534,7 @@ export default function DashboardPage() {
                             <Button
                                 type="submit"
                                 disabled={saving}
-                                className="h-11 rounded-xl bg-gradient-to-r from-[#8F51EA] to-[#F86FC4] px-6 text-sm font-bold text-white shadow-lg shadow-purple-200 transition hover:from-[#7940D0] hover:to-[#E85FB4]"
+                                className="h-11 rounded-xl bg-gradient-to-r from-[#8F51EA] to-[#F86FC4] px-6 text-sm font-bold text-white shadow-lg shadow-purple-200 transition hover:from-[#7940D0] hover:to-[#E85FB4] dark:shadow-purple-950/40"
                             >
                                 {saving ? "Saving..." : "Save Changes"}
                             </Button>

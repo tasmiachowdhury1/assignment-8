@@ -1,4 +1,3 @@
-
 "use client";
 
 import { useState } from "react";
@@ -108,47 +107,50 @@ export default function LoginPage() {
 
     return (
         <main
-            className="relative min-h-screen w-full overflow-hidden bg-cover bg-center bg-no-repeat"
+            className="relative min-h-screen w-full overflow-hidden bg-cover bg-center bg-no-repeat transition-colors duration-300"
             style={{
                 backgroundImage: "url('/images/login-bg.png')",
             }}
         >
             {/* Background Overlay */}
-            <div className="absolute inset-0 bg-purple-200/5" />
+            <div className="absolute inset-0 bg-purple-200/5 dark:bg-[#15111f]/75" />
+
+            {/* Additional Dark Mode Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-br from-transparent to-purple-200/10 dark:from-[#15111f]/30 dark:to-[#15111f]/80" />
 
             {/* Main Content */}
             <div className="relative z-10 flex min-h-screen items-center justify-end px-4 py-8 sm:px-8 lg:pr-[8%]">
 
                 {/* Login Card */}
                 <section className="flex w-full max-w-[430px] items-center justify-center">
-                    <div className="w-full rounded-2xl border border-white/70 bg-white/90 p-6 shadow-2xl shadow-purple-300/40 backdrop-blur-md sm:p-8">
+                    <div className="w-full rounded-2xl border border-white/70 bg-white/90 p-6 shadow-2xl shadow-purple-300/40 backdrop-blur-md transition-colors duration-300 dark:border-[#49375F] dark:bg-[#211a30]/95 dark:shadow-purple-950/40 sm:p-8">
 
                         {/* Heading */}
                         <div className="mb-7 text-center">
-                            <h1 className="text-3xl font-extrabold tracking-tight text-[#211D35] sm:text-4xl">
+                            <h1 className="text-3xl font-extrabold tracking-tight text-[#211D35] dark:text-white sm:text-4xl">
                                 Welcome{" "}
-                                <span className="text-[#8F51EA]">
+                                <span className="text-[#8F51EA] dark:text-[#b995ff]">
                                     Back!
                                 </span>
                             </h1>
 
-                            <p className="mt-2 text-sm text-[#77718B]">
+                            <p className="mt-2 text-sm text-[#77718B] dark:text-[#b7a9cc]">
                                 Sign in to access your account
                             </p>
                         </div>
 
                         {/* Login / Register Tabs */}
-                        <div className="mb-6 grid grid-cols-2 border-b border-purple-100">
+                        <div className="mb-6 grid grid-cols-2 border-b border-purple-100 dark:border-[#49375F]">
                             <Link
                                 href="/login"
-                                className="border-b-2 border-[#8F51EA] py-3 text-center text-sm font-bold text-[#8F51EA]"
+                                className="border-b-2 border-[#8F51EA] py-3 text-center text-sm font-bold text-[#8F51EA] dark:text-[#b995ff]"
                             >
                                 Login
                             </Link>
 
                             <Link
                                 href="/register"
-                                className="py-3 text-center text-sm font-semibold text-[#77718B] transition hover:text-[#8F51EA]"
+                                className="py-3 text-center text-sm font-semibold text-[#77718B] transition hover:text-[#8F51EA] dark:text-[#a99bbd] dark:hover:text-[#c4a2ff]"
                             >
                                 Register
                             </Link>
@@ -164,7 +166,7 @@ export default function LoginPage() {
                             <div className="relative">
                                 <Mail
                                     size={18}
-                                    className="absolute left-4 top-1/2 z-10 -translate-y-1/2 text-[#77718B]"
+                                    className="absolute top-1/2 left-4 z-10 -translate-y-1/2 text-[#77718B] dark:text-[#a99bbd]"
                                 />
 
                                 <Input
@@ -177,7 +179,7 @@ export default function LoginPage() {
                                     placeholder="Email Address"
                                     required
                                     autoComplete="email"
-                                    className="h-12 rounded-xl border-purple-100 bg-white pl-11 text-sm text-[#211D35] placeholder:text-[#A49BB5] focus-visible:ring-[#8F51EA]"
+                                    className="h-12 rounded-xl border-purple-100 bg-white pl-11 text-sm text-[#211D35] placeholder:text-[#A49BB5] focus-visible:ring-[#8F51EA] dark:border-[#49375F] dark:bg-[#30243f] dark:text-white dark:placeholder:text-[#9585aa] dark:focus-visible:ring-[#a875f5]"
                                 />
                             </div>
 
@@ -185,7 +187,7 @@ export default function LoginPage() {
                             <div className="relative">
                                 <LockKeyhole
                                     size={18}
-                                    className="absolute left-4 top-1/2 z-10 -translate-y-1/2 text-[#77718B]"
+                                    className="absolute top-1/2 left-4 z-10 -translate-y-1/2 text-[#77718B] dark:text-[#a99bbd]"
                                 />
 
                                 <Input
@@ -202,7 +204,7 @@ export default function LoginPage() {
                                     placeholder="Password"
                                     required
                                     autoComplete="current-password"
-                                    className="h-12 rounded-xl border-purple-100 bg-white pl-11 pr-12 text-sm text-[#211D35] placeholder:text-[#A49BB5] focus-visible:ring-[#8F51EA]"
+                                    className="h-12 rounded-xl border-purple-100 bg-white pr-12 pl-11 text-sm text-[#211D35] placeholder:text-[#A49BB5] focus-visible:ring-[#8F51EA] dark:border-[#49375F] dark:bg-[#30243f] dark:text-white dark:placeholder:text-[#9585aa] dark:focus-visible:ring-[#a875f5]"
                                 />
 
                                 <button
@@ -210,7 +212,7 @@ export default function LoginPage() {
                                     onClick={() =>
                                         setShowPassword(!showPassword)
                                     }
-                                    className="absolute right-4 top-1/2 -translate-y-1/2 text-[#9389A8] transition hover:text-[#8F51EA]"
+                                    className="absolute top-1/2 right-4 -translate-y-1/2 text-[#9389A8] transition hover:text-[#8F51EA] dark:text-[#a99bbd] dark:hover:text-[#c4a2ff]"
                                     aria-label={
                                         showPassword
                                             ? "Hide password"
@@ -227,7 +229,7 @@ export default function LoginPage() {
 
                             {/* Remember Me / Forgot Password */}
                             <div className="flex items-center justify-between gap-3 text-xs">
-                                <label className="flex cursor-pointer items-center gap-2 text-[#77718B]">
+                                <label className="flex cursor-pointer items-center gap-2 text-[#77718B] dark:text-[#b7a9cc]">
                                     <input
                                         type="checkbox"
                                         checked={rememberMe}
@@ -241,7 +243,7 @@ export default function LoginPage() {
 
                                 <Link
                                     href="/forgot-password"
-                                    className="font-semibold text-[#8F51EA] hover:underline"
+                                    className="font-semibold text-[#8F51EA] hover:underline dark:text-[#b995ff]"
                                 >
                                     Forgot Password?
                                 </Link>
@@ -251,7 +253,7 @@ export default function LoginPage() {
                             <Button
                                 type="submit"
                                 disabled={loading || googleLoading}
-                                className="h-12 w-full rounded-xl bg-gradient-to-r from-[#8F51EA] to-[#D878F5] text-sm font-bold text-white shadow-lg shadow-purple-200 transition hover:-translate-y-0.5 hover:from-[#7940D0] hover:to-[#C45BE8]"
+                                className="h-12 w-full rounded-xl bg-gradient-to-r from-[#8F51EA] to-[#D878F5] text-sm font-bold text-white shadow-lg shadow-purple-200 transition hover:-translate-y-0.5 hover:from-[#7940D0] hover:to-[#C45BE8] dark:shadow-purple-950/40"
                             >
                                 {loading
                                     ? "Logging in..."
@@ -268,13 +270,13 @@ export default function LoginPage() {
 
                         {/* Divider */}
                         <div className="my-6 flex items-center gap-3">
-                            <div className="h-px flex-1 bg-purple-100" />
+                            <div className="h-px flex-1 bg-purple-100 dark:bg-[#49375F]" />
 
-                            <span className="text-xs text-[#9389A8]">
+                            <span className="text-xs text-[#9389A8] dark:text-[#a99bbd]">
                                 or continue with
                             </span>
 
-                            <div className="h-px flex-1 bg-purple-100" />
+                            <div className="h-px flex-1 bg-purple-100 dark:bg-[#49375F]" />
                         </div>
 
                         {/* Google Login */}
@@ -283,7 +285,7 @@ export default function LoginPage() {
                             variant="outline"
                             disabled={googleLoading || loading}
                             onClick={handleGoogleLogin}
-                            className="h-12 w-full rounded-xl border-purple-200 bg-white text-sm font-semibold text-[#211D35] transition hover:bg-purple-50"
+                            className="h-12 w-full rounded-xl border-purple-200 bg-white text-sm font-semibold text-[#211D35] transition hover:bg-purple-50 dark:border-[#59456f] dark:bg-[#30243f] dark:text-[#eee5fa] dark:hover:bg-[#3b2c4e]"
                         >
                             <svg
                                 aria-hidden="true"
@@ -314,11 +316,11 @@ export default function LoginPage() {
                         </Button>
 
                         {/* Register Link */}
-                        <p className="mt-7 text-center text-xs text-[#77718B]">
+                        <p className="mt-7 text-center text-xs text-[#77718B] dark:text-[#b7a9cc]">
                             Don&apos;t have an account?{" "}
                             <Link
                                 href="/register"
-                                className="font-bold text-[#8F51EA] hover:underline"
+                                className="font-bold text-[#8F51EA] hover:underline dark:text-[#b995ff]"
                             >
                                 Register
                             </Link>
