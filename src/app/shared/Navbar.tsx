@@ -26,6 +26,7 @@ const navLinks = [
     { name: "Home", href: "/" },
     { name: "Explore Studios", href: "/studios" },
     { name: "How It Works", href: "/#how-it-works" },
+    { name: "Why Choose Us", href: "/#why-choose" },
     { name: "About Us", href: "/#about" },
 ];
 
@@ -37,17 +38,17 @@ const dashboardLinks = [
     },
     {
         name: "Add New Studio",
-        href: "/dashboard/add-studio",
+        href: "/add-newstudio",
         icon: PlusCircle,
     },
     {
         name: "My Studio Listings",
-        href: "/dashboard/my-studios",
+        href: "/my-studios",
         icon: Building2,
     },
     {
         name: "My Bookings",
-        href: "/dashboard/my-bookings",
+        href: "/my-bookings",
         icon: CalendarCheck,
     },
 ];
@@ -136,7 +137,7 @@ export default function Navbar() {
                 </Link>
 
                 {/* Desktop Navigation */}
-                <div className="hidden items-center gap-8 lg:flex">
+                <div className="hidden items-center gap-6 xl:gap-8 lg:flex">
                     {navLinks.map((link) => (
                         <Link
                             key={link.name}
