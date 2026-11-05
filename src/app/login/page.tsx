@@ -5,6 +5,7 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { authClient } from "@/app/lib/auth-client";
 
 import {
     Mail,
@@ -18,8 +19,6 @@ import toast from "react-hot-toast";
 
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
-
-import { authClient } from "@/app/lib/auth-client";
 
 export default function LoginPage() {
     const router = useRouter();
